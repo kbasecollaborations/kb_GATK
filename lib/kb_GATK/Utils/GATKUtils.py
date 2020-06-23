@@ -15,12 +15,7 @@ class GATKUtils:
        #output_dir = "/home/manish/Desktop/apps/kb_GATK/test_local/workdir/tmp/genome/reference/"
        #src = "/home/manish/Desktop/apps/kb_GATK/test/genome"
 
-<<<<<<< HEAD
-       #assembly_file = os.path.join(src, "reference/test.fna")
        assembly_file = os.path.join(src, "reference/NC_008253.fna")
-=======
-       assembly_file = os.path.join(src, "reference/test.fna")
->>>>>>> 8c0bccd4071a2e13e04519a8937d42e4cc6b9df0
        #fwd_fastq = "/home/manish/Desktop/apps/kb_GATK/test/bt_test_data/reads_1.fq"
        #rev_fastq = "/home/manish/Desktop/apps/kb_GATK/test/bt_test_data/reads_2.fq"
        
@@ -65,10 +60,6 @@ class GATKUtils:
         self.run_cmd(cmd)
     
     def duplicate_marking(self, output_dir):
-<<<<<<< HEAD
-       
-=======
->>>>>>> 8c0bccd4071a2e13e04519a8937d42e4cc6b9df0
         cmd = "java -jar "+ self.path + "picard.jar SortSam  INPUT= " + output_dir + "aligned_reads.sam   OUTPUT=" + output_dir + "aligned_reads.bam  SORT_ORDER=coordinate"
         self.run_cmd(cmd)
        
