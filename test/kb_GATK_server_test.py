@@ -64,7 +64,14 @@ class kb_GATKTest(unittest.TestCase):
         # Check returned data with
         # self.assertEqual(ret[...], ...) or other unittest methods
         ret = self.serviceImpl.run_kb_GATK(self.ctx, {'workspace_name': 'man4ish_gupta:narrative_1592707902187',
+<<<<<<< HEAD
+                                                       'genome_or_assembly_ref':'43745/13/1',
+                                                       'variation_object_name':'output_obj'
+                                                     }
+                                          )
+=======
                                                        'genome_ref':'43745/6/1',
                                                        'variation_ref': '42531/4/1',
                                                        'output_object_name':'output_obj'}
                                          )
+>>>>>>> 8c0bccd4071a2e13e04519a8937d42e4cc6b9df0

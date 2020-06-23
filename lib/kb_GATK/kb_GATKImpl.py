@@ -64,12 +64,20 @@ class kb_GATK:
         #os.mkdir(output_dir)
         dest = shutil.copytree(src, os.path.join(output_dir, "genome"))
 
+<<<<<<< HEAD
+        assembly_file = os.path.join(src, "reference/Ptrichocarpa_v3.1.assembly.fna")
+=======
         assembly_file = os.path.join(src, "reference/test.fna")
+>>>>>>> 8c0bccd4071a2e13e04519a8937d42e4cc6b9df0
 
         fwd_fastq = "/kb/module/test/bt_test_data/reads_1.fq"
         rev_fastq = "/kb/module/test/bt_test_data/reads_2.fq"
 
+<<<<<<< HEAD
+        output_dir = self.shared_folder + "/"  #TODO need to use uuid for storing all the intermediate results rather that using shared_folder.
+=======
         output_dir = self.shared_folder + "/"
+>>>>>>> 8c0bccd4071a2e13e04519a8937d42e4cc6b9df0
 
         self.gu.build_genome(assembly_file)
 
@@ -110,8 +118,11 @@ class kb_GATK:
         self.gu.filter_Indels(assembly_file, "filtered_indels_final.vcf", output_dir)
 
         params['vcf_staging_file_path'] = output_dir + "filtered_snps_final.vcf"
+<<<<<<< HEAD
+=======
         params['variation_object_name'] = params['output_object_name']
         params['genome_or_assembly_ref'] = params['genome_ref']
+>>>>>>> 8c0bccd4071a2e13e04519a8937d42e4cc6b9df0
         self.vu.save_variation_from_vcf(params)
 
         report = KBaseReport(self.callback_url)
