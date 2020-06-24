@@ -1,10 +1,10 @@
 #
 # define display information
 #
-name: Method Name Here
+name: kb_GATK
 
 tooltip: |
-    Perform some kind of method
+    Perform downstream analysis to generate vcf file.
 
 screenshots: []
 
@@ -24,13 +24,52 @@ suggestions:
 # Configure the display and description of parameters
 #
 parameters :
-    parameter_1 :
+    alignment :
         ui-name : |
-            First parameter
+            Alignment
         short-hint : |
-            The first parameter
-        long-hint  : |
-            The first parameter that needs to be entered to drive the method. This might be the first of many.
+            Alignment produced by BWA
+    assembly_or_genome_ref :
+        ui-name : |
+            Assembly or Genome
+        short-hint : |
+            Select the reference Assembly or Genome for the read alignment.
+    qd_filter:
+        ui-name : |
+            QD Filter
+        short-hint : |
+            QD Filter
+    fs_filter:
+        ui-name : |
+            FS Filter
+        short-hint : |
+            FS Filter
+    mq_filter:
+        ui-name : |
+            MQ Filter
+        short-hint : |
+            MQ Filter
+    sor_filter:
+        ui-name : |
+            sor Filter
+        short-hint : |
+            sor Filter
+    mqrankSum_filter:
+        ui-name : |
+            MQRank Sum filter
+        short-hint : |
+            MQRank Sum filter
+    readposranksum_filter:
+        ui-name : |
+            Read Pos Rank Sum filter
+        short-hint : |
+            Read Pos Rank Sum filter
+    output_variant_object :
+        ui-name : |
+            Output Variant Object
+        short-hint : |
+            Output Variant Object
+
 
 description : |
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed pulvinar efficitur felis, quis tincidunt sem congue at. Vivamus ornare feugiat faucibus. Fusce tincidunt mattis nunc, nec varius purus convallis quis. Nulla facilisi. In at magna dolor. Suspendisse sit amet felis at arcu auctor dapibus vitae pharetra dui. Nam semper mi quis tortor fermentum mollis. Donec a arcu pharetra, rutrum dolor vitae, rutrum mauris. Donec ornare fringilla sagittis. Nam laoreet est in elementum malesuada. Vestibulum id mi eget urna hendrerit feugiat. Donec et ultrices nulla. Phasellus diam eros, dapibus at tempus nec, semper vel ante.</p>

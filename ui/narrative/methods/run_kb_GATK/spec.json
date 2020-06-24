@@ -1,7 +1,8 @@
 {
     "ver": "0.0.1",
     "authors": [
-        "man4ish_gupta"
+        "man4ish_gupta",
+        "pranjan77"
     ],
     "contact": "",
     "categories": ["active"],
@@ -10,17 +11,112 @@
         "output": null
     },
     "parameters": [ 
-        {
-            "id": "parameter_1",
-            "optional": true,
-            "advanced": false,
-            "allow_multiple": false,
-            "default_values": [ "" ],
-            "field_type": "text",
-            "text_options": {
-                "valid_ws_types": [ ]
-            }
-        }
+     {
+    "id" : "alignment",
+    "optional" : false,
+    "advanced" : false,
+    "allow_multiple" : false,
+    "default_values" : [ "" ],
+    "field_type" : "text",
+    "text_options" : {
+      "valid_ws_types" : [""]
+     }
+    },
+    {
+    "id" : "assembly_or_genome_ref",
+    "optional" : false,
+    "advanced" : false,
+    "allow_multiple" : false,
+    "default_values" : [ "" ],
+    "field_type" : "text",
+    "text_options" : {
+      "valid_ws_types" : ["KBaseGenomes.Genome", "KBaseGenomeAnnotations.Assembly", "KBaseGenomes.ContigSet" ]
+     }
+   },
+   {
+    "id" : "output_variant_object",
+    "optional" : false,
+    "advanced" : false,
+    "allow_multiple" : false,
+    "default_values" : [ ],
+    "field_type" : "text",
+    "text_options" : {
+      "valid_ws_types" : ["KBaseGwasData.Variations"],
+      "is_output_name" : true
+     }
+   },
+   {
+    "id" : "qd_filter",
+    "optional" : false,
+    "advanced" : true,
+    "allow_multiple" : false,
+    "default_values" : ["< 2.0"],
+    "field_type" : "text",
+    "text_options" : {
+      "valid_ws_types" : [ ],
+      "is_output_name" : false
+     }
+   },
+   {
+    "id" : "fs_filter",
+    "optional" : false,
+    "advanced" : true,
+    "allow_multiple" : false,
+    "default_values" : ["> 60.0"],
+    "field_type" : "text",
+    "text_options" : {
+      "valid_ws_types" : [ ],
+      "is_output_name" : false
+     }
+   },
+   {
+    "id" : "mq_filter",
+    "optional" : false,
+    "advanced" : true,
+    "allow_multiple" : false,
+    "default_values" : ["< 40.0"],
+    "field_type" : "text",
+    "text_options" : {
+      "valid_ws_types" : [ ],
+      "is_output_name" : false
+     }
+   },
+   {
+    "id" : "sor_filter",
+    "optional" : false,
+    "advanced" : true,
+    "allow_multiple" : false,
+    "default_values" : ["> 4.0"],
+    "field_type" : "text",
+    "text_options" : {
+      "valid_ws_types" : [ ],
+      "is_output_name" : false
+     }
+   },
+   {
+    "id" : "mqrankSum_filter",
+    "optional" : false,
+    "advanced" : true,
+    "allow_multiple" : false,
+    "default_values" : ["< -12.5"],
+    "field_type" : "text",
+    "text_options" : {
+      "valid_ws_types" : [ ],
+      "is_output_name" : false
+     }
+   },
+   {
+    "id" : "readposranksum_filter",
+    "optional" : false,
+    "advanced" : true,
+    "allow_multiple" : false,
+    "default_values" : ["< -8.0"],
+    "field_type" : "text",
+    "text_options" : {
+      "valid_ws_types" : [ ],
+      "is_output_name" : false
+     }
+   }
     ],
     "behavior": {
         "service-mapping": {
@@ -31,12 +127,20 @@
                 {
                     "narrative_system_variable": "workspace",
                     "target_property": "workspace_name"
-                },{
-                    "narrative_system_variable": "workspace_id",
-                    "target_property": "workspace_id"
-                },{
-                    "input_parameter": "parameter_1",
-                    "target_property": "parameter_1"
+                },
+                {
+                    "input_parameter": "alignment",
+                    "target_property": "alignment",
+                    "target_type_transform": "resolved-ref"
+                },
+                {
+                   "input_parameter": "assembly_or_genome_ref",
+                   "target_property": "assembly_or_genome_ref",
+                   "target_type_transform": "resolved-ref"
+                },
+                {
+                   "input_parameter": "output_variant_object",
+                   "target_property": "output_variant_object"
                 }
             ],
             "output_mapping": [

@@ -109,7 +109,12 @@ class kb_GATK:
    
         self.gu.filter_Indels(assembly_file, "filtered_indels_final.vcf", output_dir)
 
-        params['vcf_staging_file_path'] = output_dir + "filtered_snps_final.vcf"
+        os.system("grep   '##fileformat' " + output_dir + "filtered_snps_final.vcf > " + output_dir + "sample.vcf")
+        cmd = "grep -v  '##' " + output_dir + "filtered_snps_final.vcf >> " + output_dir + "sample.vcf"
+        
+        os.system(cmd)
+
+        params['vcf_staging_file_path'] = output_dir + "sample.vcf"
 
         self.vu.save_variation_from_vcf(params)
 
