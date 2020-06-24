@@ -46,7 +46,7 @@
      }
    },
    {
-    "id" : "qd_filter",
+    "id" : "snp_qd_filter",
     "optional" : false,
     "advanced" : true,
     "allow_multiple" : false,
@@ -58,7 +58,7 @@
      }
    },
    {
-    "id" : "fs_filter",
+    "id" : "snp_fs_filter",
     "optional" : false,
     "advanced" : true,
     "allow_multiple" : false,
@@ -70,7 +70,7 @@
      }
    },
    {
-    "id" : "mq_filter",
+    "id" : "snp_mq_filter",
     "optional" : false,
     "advanced" : true,
     "allow_multiple" : false,
@@ -82,7 +82,7 @@
      }
    },
    {
-    "id" : "sor_filter",
+    "id" : "snp_sor_filter",
     "optional" : false,
     "advanced" : true,
     "allow_multiple" : false,
@@ -94,7 +94,7 @@
      }
    },
    {
-    "id" : "mqrankSum_filter",
+    "id" : "snp_mqrankSum_filter",
     "optional" : false,
     "advanced" : true,
     "allow_multiple" : false,
@@ -106,7 +106,79 @@
      }
    },
    {
-    "id" : "readposranksum_filter",
+    "id" : "snp_readposranksum_filter",
+    "optional" : false,
+    "advanced" : true,
+    "allow_multiple" : false,
+    "default_values" : ["< -8.0"],
+    "field_type" : "text",
+    "text_options" : {
+      "valid_ws_types" : [ ],
+      "is_output_name" : false
+     }
+   },
+   {
+    "id" : "indel_qd_filter",
+    "optional" : false,
+    "advanced" : true,
+    "allow_multiple" : false,
+    "default_values" : ["< 2.0"],
+    "field_type" : "text",
+    "text_options" : {
+      "valid_ws_types" : [ ],
+      "is_output_name" : false
+     }
+   },
+   {
+    "id" : "indel_fs_filter",
+    "optional" : false,
+    "advanced" : true,
+    "allow_multiple" : false,
+    "default_values" : ["> 60.0"],
+    "field_type" : "text",
+    "text_options" : {
+      "valid_ws_types" : [ ],
+      "is_output_name" : false
+     }
+   },
+   {
+    "id" : "indel_mq_filter",
+    "optional" : false,
+    "advanced" : true,
+    "allow_multiple" : false,
+    "default_values" : ["< 40.0"],
+    "field_type" : "text",
+    "text_options" : {
+      "valid_ws_types" : [ ],
+      "is_output_name" : false
+     }
+   },
+   {
+    "id" : "indel_sor_filter",
+    "optional" : false,
+    "advanced" : true,
+    "allow_multiple" : false,
+    "default_values" : ["> 4.0"],
+    "field_type" : "text",
+    "text_options" : {
+      "valid_ws_types" : [ ],
+      "is_output_name" : false
+     }
+   },
+   {
+    "id" : "indel_mqrankSum_filter",
+    "optional" : false,
+    "advanced" : true,
+    "allow_multiple" : false,
+    "default_values" : ["< -12.5"],
+    "field_type" : "text",
+    "text_options" : {
+      "valid_ws_types" : [ ],
+      "is_output_name" : false
+     }
+   },
+   {
+    "id" : "indel_readposranksum_filter",
     "optional" : false,
     "advanced" : true,
     "allow_multiple" : false,
@@ -117,6 +189,22 @@
       "is_output_name" : false
      }
    }
+    ],
+   "parameter-groups": [
+      {
+        "id": "snp_filter",
+        "parameters": ["snp_qd_filter", "snp_fs_filter", "snp_mq_filter", "snp_sor_filter", "snp_mqrankSum_filter", "snp_readposranksum_filter"],
+        "optional": true,
+        "allow_multiple": false,
+        "with_border": true
+       },
+       {
+        "id": "indel_filter",
+        "parameters": ["indel_qd_filter", "indel_fs_filter", "indel_mq_filter", "indel_sor_filter", "indel_mqrankSum_filter", "indel_readposranksum_filter"],
+        "optional": true,
+        "allow_multiple": false,
+        "with_border": true
+       }
     ],
     "behavior": {
         "service-mapping": {

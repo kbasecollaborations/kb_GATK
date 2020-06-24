@@ -11,6 +11,25 @@ module kb_GATK {
     /*
         This example function accepts any number of parameters and returns results in a KBaseReport
     */
-    funcdef run_kb_GATK(mapping<string,UnspecifiedObject> params) returns (ReportResults output) authentication required;
+
+    typedef structure {
+        string alignment;
+        string assembly_or_genome_ref;
+        string output_variant_object;
+        string snp_qd_filter;
+        string snp_fs_filter;
+        string snp_mq_filter;
+        string snp_sor_filter;
+        string snp_mqrankSum_filter;
+        string snp_readposranksum_filter;
+        string indel_qd_filter;
+        string indel_fs_filter;
+        string indel_mq_filter;
+        string indel_sor_filter;
+        string indel_mqrankSum_filter;
+        string indel_readposranksum_filter;
+    } Inparams;
+
+    funcdef run_kb_GATK(Inparams params) returns (ReportResults output) authentication required;
 
 };

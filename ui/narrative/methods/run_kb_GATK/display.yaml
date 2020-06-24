@@ -34,42 +34,82 @@ parameters :
             Assembly or Genome
         short-hint : |
             Select the reference Assembly or Genome for the read alignment.
-    qd_filter:
+    snp_qd_filter:
         ui-name : |
             QD Filter
         short-hint : |
             QD Filter
-    fs_filter:
+    snp_fs_filter:
         ui-name : |
             FS Filter
         short-hint : |
             FS Filter
-    mq_filter:
+    snp_mq_filter:
         ui-name : |
             MQ Filter
         short-hint : |
             MQ Filter
-    sor_filter:
+    snp_sor_filter:
         ui-name : |
             sor Filter
         short-hint : |
             sor Filter
-    mqrankSum_filter:
+    snp_mqrankSum_filter:
         ui-name : |
             MQRank Sum filter
         short-hint : |
             MQRank Sum filter
-    readposranksum_filter:
+    snp_readposranksum_filter:
         ui-name : |
             Read Pos Rank Sum filter
         short-hint : |
             Read Pos Rank Sum filter
+    indel_qd_filter:
+        ui-name : |
+            QD Filter
+        short-hint : |
+            QD Filter
+    indel_fs_filter:
+        ui-name : |
+            FS Filter
+        short-hint : |
+            FS Filter
+    indel_mq_filter:
+        ui-name : |
+            MQ Filter
+        short-hint : |
+            MQ Filter
+    indel_sor_filter:
+        ui-name : |
+            sor Filter
+        short-hint : |
+            sor Filter
+    indel_mqrankSum_filter:
+        ui-name : |
+            MQRank Sum filter
+        short-hint : |
+            MQRank Sum filter
+    indel_readposranksum_filter:
+        ui-name : |
+            Read Pos Rank Sum filter
+        short-hint : |
+            Read Pos Rank Sum filter        
     output_variant_object :
         ui-name : |
             Output Variant Object
         short-hint : |
             Output Variant Object
-
+parameter-groups :
+    snp_filter :
+        ui-name : |
+            SNP Filter options
+        short-hint : |
+            SNP Filter options
+    indel_filter :
+        ui-name : |
+            Indel Filter options
+        short-hint : |
+            Indel Filter options        
 
 description : |
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed pulvinar efficitur felis, quis tincidunt sem congue at. Vivamus ornare feugiat faucibus. Fusce tincidunt mattis nunc, nec varius purus convallis quis. Nulla facilisi. In at magna dolor. Suspendisse sit amet felis at arcu auctor dapibus vitae pharetra dui. Nam semper mi quis tortor fermentum mollis. Donec a arcu pharetra, rutrum dolor vitae, rutrum mauris. Donec ornare fringilla sagittis. Nam laoreet est in elementum malesuada. Vestibulum id mi eget urna hendrerit feugiat. Donec et ultrices nulla. Phasellus diam eros, dapibus at tempus nec, semper vel ante.</p>

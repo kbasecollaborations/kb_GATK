@@ -91,9 +91,9 @@ class kb_GATK:
    
         self.gu.extract_variants(assembly_file, output_dir)
    
-        self.gu.filter_SNPs(assembly_file, "filtered_snps.vcf", output_dir)
+        self.gu.filter_SNPs(assembly_file, "filtered_snps.vcf", output_dir, params)
    
-        self.gu.filter_Indels(assembly_file, "filtered_indels.vcf", output_dir)
+        self.gu.filter_Indels(assembly_file, "filtered_indels.vcf", output_dir, params)
    
         self.gu.exclude_filtered_variants(output_dir)
    
@@ -105,9 +105,9 @@ class kb_GATK:
    
         self.gu.apply_BQSR(assembly_file,  "post_recal_data.table", output_dir)
    
-        self.gu.filter_SNPs(assembly_file, "filtered_snps_final.vcf", output_dir)
+        self.gu.filter_SNPs(assembly_file, "filtered_snps_final.vcf", output_dir, params)
    
-        self.gu.filter_Indels(assembly_file, "filtered_indels_final.vcf", output_dir)
+        self.gu.filter_Indels(assembly_file, "filtered_indels_final.vcf", output_dir, params)
 
         os.system("grep   '##fileformat' " + output_dir + "filtered_snps_final.vcf > " + output_dir + "sample.vcf")
         cmd = "grep -v  '##' " + output_dir + "filtered_snps_final.vcf >> " + output_dir + "sample.vcf"

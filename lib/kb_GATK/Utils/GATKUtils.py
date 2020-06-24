@@ -85,12 +85,12 @@ class GATKUtils:
         cmd2 = "java -jar "+ self.path + "gatk-4.1.3.0/gatk-package-4.1.3.0-local.jar SelectVariants -R " + assembly_file  + " -V " + output_dir + "raw_variants.vcf --select-type INDEL -O " + output_dir + "raw_indels.vcf"
         self.run_cmd(cmd2)
 
-    def filter_SNPs(self, assembly_file, output_file, output_dir):
-        cmd = "java -jar "+ self.path + "gatk-4.1.3.0/gatk-package-4.1.3.0-local.jar VariantFiltration -R " + assembly_file  + " -V " + output_dir + "raw_snps.vcf -O "  + output_dir +  output_file +" -filter-name 'QD_filter' -filter 'QD < 2.0' -filter-name 'FS_filter' -filter 'FS > 60.0' -filter-name 'MQ_filter' -filter 'MQ < 40.0' -filter-name 'SOR_filter' -filter 'SOR > 4.0' -filter-name 'MQRankSum_filter' -filter 'MQRankSum < -12.5' -filter-name 'ReadPosRankSum_filter' -filter 'ReadPosRankSum < -8.0'"
+    def filter_SNPs(self, assembly_file, output_file, output_dir, params):
+        cmd = "java -jar "+ self.path + "gatk-4.1.3.0/gatk-package-4.1.3.0-local.jar VariantFiltration -R " + assembly_file  + " -V " + output_dir + "raw_snps.vcf -O "  + output_dir +  output_file +" -filter-name 'QD_filter' -filter 'QD < " + params['snp_qd_filter'] + "' -filter-name 'FS_filter' -filter 'FS > " + params['snp_fs_filter'] + "' -filter-name 'MQ_filter' -filter 'MQ < " + params['snp_mq_filter'] + "' -filter-name 'SOR_filter' -filter 'SOR > " + params['snp_sor_filter'] + "' -filter-name 'MQRankSum_filter' -filter 'MQRankSum < " + params['snp_mqranksum_filter'] + "' -filter-name 'ReadPosRankSum_filter' -filter 'ReadPosRankSum < " + params['snp_readposranksum_filter'] + "'"
         self.run_cmd(cmd)
 
-    def filter_Indels(self, assembly_file, output_file, output_dir):
-        cmd = "java -jar "+ self.path + "gatk-4.1.3.0/gatk-package-4.1.3.0-local.jar VariantFiltration -R " + assembly_file  + " -V " + output_dir + "raw_indels.vcf -O " + output_dir + output_file +" -filter-name 'QD_filter' -filter 'QD < 2.0' -filter-name 'FS_filter' -filter 'FS > 200.0' -filter-name 'SOR_filter' -filter 'SOR > 10.0'"
+    def filter_Indels(self, assembly_file, output_file, output_dir, params):
+        cmd = "java -jar "+ self.path + "gatk-4.1.3.0/gatk-package-4.1.3.0-local.jar VariantFiltration -R " + assembly_file  + " -V " + output_dir + "raw_indels.vcf -O " + output_dir + output_file +" -filter-name 'QD_filter' -filter 'QD < " + params['indel_qd_filter'] + "' -filter-name 'FS_filter' -filter 'FS > " + params['indel_fs_filter'] + "' -filter-name 'SOR_filter' -filter 'SOR > " + params['indel_sor_filter'] + "'"
         self.run_cmd(cmd)
 
     def exclude_filtered_variants(self, output_dir):
