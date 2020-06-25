@@ -4,8 +4,11 @@ import logging
 import os
 import uuid
 from installed_clients.VariationUtilClient import VariationUtil
-from kb_GATK.Utils.GATKUtils import GATKUtils
 from installed_clients.KBaseReportClient import KBaseReport
+from kb_GATK.Utils.GATKUtils import GATKUtils
+from kb_GATK.Utils.DownloadAlignmentUtils import DownloadAlignmentUtils
+
+
 import shutil
 #END_HEADER
 
@@ -42,6 +45,7 @@ class kb_GATK:
         logging.basicConfig(format='%(created)s %(levelname)s: %(message)s',
                             level=logging.INFO)
         self.vu = VariationUtil(self.callback_url)
+        self.du = DownloadAlignmentUtils(self.callback_url)
         #END_CONSTRUCTOR
         pass
 
@@ -58,6 +62,11 @@ class kb_GATK:
         #BEGIN run_kb_GATK
 
         
+
+        source_ref = '43745/43/1'
+
+        self.du.downloadreadalignment(source_ref, params, self.callback_url)
+        exit("download done")
         src = "/kb/module/test/genome"
         output_dir = self.shared_folder
         #output_dir = os.path.join(self.shared_folder, str(uuid.uuid4()))

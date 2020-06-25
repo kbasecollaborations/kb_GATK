@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="54adc771-0628-4b9e-a328-c50a44abd5af" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/dependencies.json" beforeDir="false" afterPath="$PROJECT_DIR$/dependencies.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/kb_GATK/kb_GATKImpl.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/kb_GATK/kb_GATKImpl.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ui/narrative/methods/run_kb_GATK/spec.json" beforeDir="false" afterPath="$PROJECT_DIR$/ui/narrative/methods/run_kb_GATK/spec.json" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1doyScjM7riUgrrl53F2mjLc5bK" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="54adc771-0628-4b9e-a328-c50a44abd5af" name="Default Changelist" comment="" />
+      <created>1593105741911</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1593105741911</updated>
+    </task>
+    <servers />
+  </component>
+</project>
