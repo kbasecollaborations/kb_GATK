@@ -86,7 +86,9 @@ class GATKUtils:
         self.run_cmd(cmd2)
 
     def filter_SNPs(self, assembly_file, output_file, output_dir, params):
-        cmd = "java -jar "+ self.path + "gatk-4.1.3.0/gatk-package-4.1.3.0-local.jar VariantFiltration -R " + assembly_file  + " -V " + output_dir + "raw_snps.vcf -O "  + output_dir +  output_file +" -filter-name 'QD_filter' -filter 'QD < " + params['snp_qd_filter'] + "' -filter-name 'FS_filter' -filter 'FS > " + params['snp_fs_filter'] + "' -filter-name 'MQ_filter' -filter 'MQ < " + params['snp_mq_filter'] + "' -filter-name 'SOR_filter' -filter 'SOR > " + params['snp_sor_filter'] + "' -filter-name 'MQRankSum_filter' -filter 'MQRankSum < " + params['snp_mqranksum_filter'] + "' -filter-name 'ReadPosRankSum_filter' -filter 'ReadPosRankSum < " + params['snp_readposranksum_filter'] + "'"
+        print(params)
+        cmd = "java -jar "+ self.path + "gatk-4.1.3.0/gatk-package-4.1.3.0-local.jar VariantFiltration -R " + assembly_file  + " -V " + output_dir + "raw_snps.vcf -O "  + output_dir +  output_file +" -filter-name 'QD_filter' -filter 'QD < " + params['snp_qd_filter'] + "' -filter-name 'FS_filter' -filter 'FS > " + params['snp_fs_filter'] + "' -filter-name 'MQ_filter' -filter 'MQ < " + params['snp_mq_filter'] + "' -filter-name 'SOR_filter' -filter 'SOR > " + params['snp_sor_filter'] + "' -filter-name 'MQRankSum_filter' -filter 'MQRankSum < " + params['snp_mqrankSum_filter'] + "' -filter-name 'ReadPosRankSum_filter' -filter 'ReadPosRankSum < " + params['snp_readposranksum_filter'] + "'"
+        print(cmd)
         self.run_cmd(cmd)
 
     def filter_Indels(self, assembly_file, output_file, output_dir, params):

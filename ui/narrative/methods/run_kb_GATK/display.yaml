@@ -36,64 +36,64 @@ parameters :
             Select the reference Assembly or Genome for the read alignment.
     snp_qd_filter:
         ui-name : |
-            QD Filter
+            QD Filter (<)
         short-hint : |
             QD Filter
     snp_fs_filter:
         ui-name : |
-            FS Filter
+            FS Filter (>)
         short-hint : |
             FS Filter
     snp_mq_filter:
         ui-name : |
-            MQ Filter
+            MQ Filter (<)
         short-hint : |
             MQ Filter
     snp_sor_filter:
         ui-name : |
-            sor Filter
+            SOR Filter (>)
         short-hint : |
-            sor Filter
+            SOR Filter
     snp_mqrankSum_filter:
         ui-name : |
-            MQRank Sum filter
+            MQRank Sum Filter (<)
         short-hint : |
-            MQRank Sum filter
+            MQRank Sum Filter
     snp_readposranksum_filter:
         ui-name : |
-            Read Pos Rank Sum filter
+            Read Pos Rank Sum Filter (<)
         short-hint : |
-            Read Pos Rank Sum filter
+            Read Pos Rank Sum Filter
     indel_qd_filter:
         ui-name : |
-            QD Filter
+            QD Filter (<)
         short-hint : |
             QD Filter
     indel_fs_filter:
         ui-name : |
-            FS Filter
+            FS Filter (>)
         short-hint : |
             FS Filter
     indel_mq_filter:
         ui-name : |
-            MQ Filter
+            MQ Filter (<)
         short-hint : |
             MQ Filter
     indel_sor_filter:
         ui-name : |
-            sor Filter
+            SOR Filter (>)
         short-hint : |
-            sor Filter
+            SOR Filter
     indel_mqrankSum_filter:
         ui-name : |
-            MQRank Sum filter
+            MQRank Sum Filter (<)
         short-hint : |
-            MQRank Sum filter
+            MQRank Sum Filter
     indel_readposranksum_filter:
         ui-name : |
-            Read Pos Rank Sum filter
+            Read Pos Rank Sum Filter (<)
         short-hint : |
-            Read Pos Rank Sum filter        
+            Read Pos Rank Sum Filter        
     output_variant_object :
         ui-name : |
             Output Variant Object
@@ -117,3 +117,4 @@ description : |
     <p>Curabitur auctor, metus at tristique euismod, odio elit tincidunt neque, a facilisis sem massa convallis dolor. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nunc ut hendrerit tellus. Nunc lacinia laoreet finibus. Etiam vitae sagittis enim. Fusce consectetur porta est eu pretium. In hac habitasse platea dictumst. Integer pellentesque sit amet sapien id venenatis. Nullam ac risus at orci eleifend aliquet. Vestibulum elit purus, euismod a nibh quis, pellentesque semper leo. Curabitur ullamcorper felis hendrerit nunc egestas, sit amet pharetra sapien porttitor. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Maecenas hendrerit ipsum a ligula aliquet vestibulum. Duis a ante urna. Aenean ante neque, rhoncus id luctus ut, accumsan vel nunc.</p>
 
     <p>Pellentesque accumsan aliquet magna, id consectetur tellus condimentum eu. Suspendisse elit dui, ornare ac leo eget, tincidunt feugiat orci. Maecenas auctor gravida lacinia. Mauris interdum nisi vel gravida varius. Nullam tempus, purus eget posuere aliquet, odio elit semper massa, quis facilisis massa odio vitae lacus. Fusce varius enim a mi vehicula tempus. Maecenas faucibus tellus ipsum, at venenatis ipsum auctor et. Suspendisse sem mi, dignissim id porta efficitur, auctor eget magna. Vivamus varius purus nulla, porttitor euismod lorem cursus quis. Nulla sit amet eros nec sem ultrices pulvinar.</p>
+
