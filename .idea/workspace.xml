@@ -2,8 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="54adc771-0628-4b9e-a328-c50a44abd5af" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dependencies.json" beforeDir="false" afterPath="$PROJECT_DIR$/dependencies.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kb_GATK.spec" beforeDir="false" afterPath="$PROJECT_DIR$/kb_GATK.spec" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/kb_GATK/Utils/DownloadAlignmentUtils.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/kb_GATK/Utils/DownloadAlignmentUtils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/kb_GATK/Utils/GATKUtils.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/kb_GATK/Utils/GATKUtils.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/kb_GATK/kb_GATKImpl.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/kb_GATK/kb_GATKImpl.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/kb_GATK_server_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/kb_GATK_server_test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ui/narrative/methods/run_kb_GATK/display.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/ui/narrative/methods/run_kb_GATK/display.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ui/narrative/methods/run_kb_GATK/spec.json" beforeDir="false" afterPath="$PROJECT_DIR$/ui/narrative/methods/run_kb_GATK/spec.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
