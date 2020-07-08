@@ -8,6 +8,19 @@ class GATKUtils:
 
     def __init__(self):
        self.path = "/kb/module/deps/"
+       output_dir = "/kb/module/work/tmp/genome/reference/"
+       src = "/kb/module/test/genome"
+
+       #self.path = "/home/manish/Desktop/apps/kb_GATK/deps/"
+       #output_dir = "/home/manish/Desktop/apps/kb_GATK/test_local/workdir/tmp/genome/reference/"
+       #src = "/home/manish/Desktop/apps/kb_GATK/test/genome"
+
+       #assembly_file = os.path.join(src, "reference/NC_008253.fna")
+       #fwd_fastq = "/home/manish/Desktop/apps/kb_GATK/test/bt_test_data/reads_1.fq"
+       #rev_fastq = "/home/manish/Desktop/apps/kb_GATK/test/bt_test_data/reads_2.fq"
+       
+       fwd_fastq = "/kb/module/test/bt_test_data/reads_1.fq"
+       rev_fastq = "/kb/module/test/bt_test_data/reads_2.fq"
        pass 
 
     def run_cmd(self, cmd):
@@ -36,13 +49,19 @@ class GATKUtils:
       
     def generate_sequence_dictionary(self, assembly_file):
        
-        output_dict = assembly_file.replace("fna","dict")
+        output_dict = assembly_file.replace("fa","dict")
         cmd = "java -jar "+ self.path + "picard.jar CreateSequenceDictionary REFERENCE=" + assembly_file +" OUTPUT=" + output_dict
         print(cmd)
         self.run_cmd(cmd)
-
+               
+    def mapping_genome(self, ref_genome, rev_fastq, fwd_fastq, output_dir ):
+        
+        cmd = "bwa mem -t 32 -M -R " + "\"@RG\\tID:sample_1\\tLB:sample_1\\tPL:ILLUMINA\\tPM:HISEQ\\tSM:sample_1\" " + ref_genome +" "+ rev_fastq + " " + fwd_fastq + " > " + output_dir + "aligned_reads.sam"
+        self.run_cmd(cmd)
+    
     def duplicate_marking(self, output_dir, sam_file):
-        cmd = "java -jar "+ self.path + "picard.jar SortSam  INPUT= " + sam_file + " OUTPUT=" + output_dir + "aligned_reads.bam  SORT_ORDER=coordinate"
+        cmd = "java -jar "+ self.path + "picard.jar SortSam  INPUT= " + sam_file + "  OUTPUT=" + output_dir + "aligned_reads.bam  SORT_ORDER=coordinate"
+        #cmd = "java -jar "+ self.path + "picard.jar SortSam  INPUT= " + output_dir + "aligned_reads.sam   OUTPUT=" + output_dir + "aligned_reads.bam  SORT_ORDER=coordinate"
         self.run_cmd(cmd)
        
     def sort_bam_index(self, output_dir):
@@ -95,5 +114,59 @@ class GATKUtils:
     def analyze_covariates(self, output_dir):
         cmd = "java -jar "+ self.path + "gatk-4.1.3.0/gatk-package-4.1.3.0-local.jar AnalyzeCovariates -before "  + output_dir +"recal_data.table -after "  + output_dir +"post_recal_data.table -plots "  + output_dir +"recalibration_plots.pdf"
         self.run_cmd(cmd)
+'''
+if __name__ == "__main__":
+   
+  gu = GATKUtils() 
+  src = "/home/manish/Desktop/apps/kb_GATK/test/genome"
+  output_dir = "/home/manish/Desktop/apps/kb_GATK/test_local/workdir/tmp"
+  #output_dir = os.path.join(self.shared_folder, str(uuid.uuid4()))
+  #os.mkdir(output_dir)
+  #dest = shutil.copytree(src, os.path.join(output_dir, "genome"))
 
+  assembly_file = os.path.join(src, "reference/test.fna")
+       
+  #gu.build_genome(assembly_file)
+
+  #gu.index_assembly(assembly_file)
+
+  #gu.generate_sequence_dictionary(assembly_file)
+
+  fwd_fastq = "/home/manish/Desktop/apps/kb_GATK/test/bt_test_data/reads_1.fq"
+  rev_fastq = "/home/manish/Desktop/apps/kb_GATK/test/bt_test_data/reads_2.fq"
+
+  #gu.mapping_genome(assembly_file, fwd_fastq, rev_fastq )
+ 
+ 
+  #gu.duplicate_marking()
+   
+  #gu.sort_bam_index()
+  
+  #gu.collect_alignment_and_insert_size_metrics(assembly_file)
+
+  gu.analyze_covariates()
+  
+  #gu.variant_calling(assembly_file)
+ 
+  #gu.extract_variants(assembly_file)
+   
+  #gu.filter_SNPs(assembly_file, "filtered_snps.vcf")
+   
+  #gu.filter_Indels(assembly_file, "filtered_indels.vcf")
+    
+  #gu.exclude_filtered_variants()
+   
+  #gu.base_quality_score_recalibration(assembly_file, "recal_data.table")
+  
+  #gu.apply_BQSR(assembly_file, "recal_data.table")
+  
+  #gu.base_quality_score_recalibration(assembly_file, "post_recal_data.table")
+    
+  #gu.apply_BQSR(assembly_file,  "post_recal_data.table")
+   
+  #gu.filter_SNPs(assembly_file, "filtered_snps_final.vcf")
+   
+  #gu.filter_Indels(assembly_file, "filtered_indels_final.vcf")
+  
+'''
 

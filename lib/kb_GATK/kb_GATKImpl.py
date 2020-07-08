@@ -45,7 +45,7 @@ class kb_GATK:
         logging.basicConfig(format='%(created)s %(levelname)s: %(message)s',
                             level=logging.INFO)
         self.vu = VariationUtil(self.callback_url)
-        self.du = DownloadAlignmentUtils()
+        self.du = DownloadAlignmentUtils(self.callback_url)
         #END_CONSTRUCTOR
         pass
 
@@ -61,22 +61,23 @@ class kb_GATK:
         # return variables are: output
         #BEGIN run_kb_GATK
 
-        output_dir = "/kb/module/work/tmp/genome/reference/"
-        src = "/kb/module/test/genome"
+        
 
+        source_ref1 = '43745/111/1'
+        out = self.du.downloadreadalignment(source_ref1, params, self.callback_url)
+        #sam_file = os.path.join(out['destination_dir'],"reads_alignment.sam")
+
+        sam_file = "/kb/module/test/reads_alignment.sam"
         src = "/kb/module/test/genome"
         output_dir = self.shared_folder
-        alignment_result = self.du.downloadreadalignment(params)
-        sam_file = os.path.join(alignment_result["destination_dir"], "reads_alignment.bam")
-
-        assembly_file = self.du.download_genome(params["genome_or_assembly_ref"], output_dir)["path"]
-
-
         #output_dir = os.path.join(self.shared_folder, str(uuid.uuid4()))
         #os.mkdir(output_dir)
         dest = shutil.copytree(src, os.path.join(output_dir, "genome"))
 
-        #assembly_file = os.path.join(src, "reference/Ptrichocarpa_v3.1.assembly.fna")
+        assembly_file = os.path.join(src, "reference/test_assembly.fa")
+
+        fwd_fastq = "/kb/module/test/bt_test_data/reads_1.fq"
+        rev_fastq = "/kb/module/test/bt_test_data/reads_2.fq"
 
         output_dir = self.shared_folder + "/"  #TODO need to use uuid for storing all the intermediate results rather that using shared_folder.
 
@@ -85,6 +86,8 @@ class kb_GATK:
         self.gu.index_assembly(assembly_file)
 
         self.gu.generate_sequence_dictionary(assembly_file)
+
+        #self.gu.mapping_genome(assembly_file, fwd_fastq, rev_fastq, output_dir )
 
         self.gu.duplicate_marking(output_dir, sam_file)
 
@@ -95,7 +98,7 @@ class kb_GATK:
         self.gu.analyze_covariates( output_dir)
    
         self.gu.variant_calling(assembly_file, output_dir)
-
+   
         self.gu.extract_variants(assembly_file, output_dir)
    
         self.gu.filter_SNPs(assembly_file, "filtered_snps.vcf", output_dir, params)
@@ -103,9 +106,9 @@ class kb_GATK:
         self.gu.filter_Indels(assembly_file, "filtered_indels.vcf", output_dir, params)
    
         self.gu.exclude_filtered_variants(output_dir)
-
+   
         self.gu.base_quality_score_recalibration(assembly_file, "recal_data.table", output_dir)
-        
+   
         self.gu.apply_BQSR(assembly_file, "recal_data.table", output_dir)
    
         self.gu.base_quality_score_recalibration(assembly_file, "post_recal_data.table", output_dir)
@@ -115,7 +118,7 @@ class kb_GATK:
         self.gu.filter_SNPs(assembly_file, "filtered_snps_final.vcf", output_dir, params)
    
         self.gu.filter_Indels(assembly_file, "filtered_indels_final.vcf", output_dir, params)
-        
+
         os.system("grep   '##fileformat' " + output_dir + "filtered_snps_final.vcf > " + output_dir + "sample.vcf")
         cmd = "grep -v  '##' " + output_dir + "filtered_snps_final.vcf >> " + output_dir + "sample.vcf"
         
