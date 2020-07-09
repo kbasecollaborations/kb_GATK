@@ -60,7 +60,8 @@ class kb_GATK:
         # ctx is the context object
         # return variables are: output
         #BEGIN run_kb_GATK
-
+      
+        exit(params)
         
 
         source_ref = params['alignment_ref']
