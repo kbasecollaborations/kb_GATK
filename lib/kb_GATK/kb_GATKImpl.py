@@ -132,6 +132,7 @@ class kb_GATK:
         os.system(cmd)            #TODO : need to remove system command after fixing variationUtils.
 
         params['vcf_staging_file_path'] = output_dir + "sample.vcf"
+        params['genome_or_assembly_ref'] = params['assembly_or_genome_ref']       
 
         self.vu.save_variation_from_vcf(params)
 
