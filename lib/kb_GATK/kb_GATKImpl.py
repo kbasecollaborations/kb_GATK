@@ -63,21 +63,28 @@ class kb_GATK:
 
         
 
-        source_ref1 = '43745/111/1'
-        out = self.du.downloadreadalignment(source_ref1, params, self.callback_url)
-        #sam_file = os.path.join(out['destination_dir'],"reads_alignment.sam")
+        source_ref = params['alignment_ref']
+        alignment_out = self.du.downloadreadalignment(source_ref, params, self.callback_url)
+        sam_file = os.path.join(alignment_out['destination_dir'],"reads_alignment.sam")
 
-        sam_file = "/kb/module/test/reads_alignment.sam"
+
+        #sam_file = "/kb/module/test/reads_alignment.sam"
         src = "/kb/module/test/genome"
         output_dir = self.shared_folder
+
+        #TODO : need to add UUID in output_dir
+
         #output_dir = os.path.join(self.shared_folder, str(uuid.uuid4()))
         #os.mkdir(output_dir)
-        dest = shutil.copytree(src, os.path.join(output_dir, "genome"))
 
-        assembly_file = os.path.join(src, "reference/test_assembly.fa")
+        #dest = shutil.copytree(src, os.path.join(output_dir, "genome"))
+        
+        #assembly_file = os.path.join(src, "reference/test_assembly.fa")
 
-        fwd_fastq = "/kb/module/test/bt_test_data/reads_1.fq"
-        rev_fastq = "/kb/module/test/bt_test_data/reads_2.fq"
+        assembly_file = self.du.download_genome(params['genome_or_assembly_ref'], output_dir)['path']
+
+        #fwd_fastq = "/kb/module/test/bt_test_data/reads_1.fq"
+        #rev_fastq = "/kb/module/test/bt_test_data/reads_2.fq"
 
         output_dir = self.shared_folder + "/"  #TODO need to use uuid for storing all the intermediate results rather that using shared_folder.
 
@@ -121,8 +128,8 @@ class kb_GATK:
 
         os.system("grep   '##fileformat' " + output_dir + "filtered_snps_final.vcf > " + output_dir + "sample.vcf")
         cmd = "grep -v  '##' " + output_dir + "filtered_snps_final.vcf >> " + output_dir + "sample.vcf"
-        
-        os.system(cmd)
+                                 
+        os.system(cmd)            #TODO : need to remove system command after fixing variationUtils.
 
         params['vcf_staging_file_path'] = output_dir + "sample.vcf"
 

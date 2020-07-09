@@ -12,7 +12,7 @@
     },
     "parameters": [ 
      {
-    "id" : "source_ref",
+    "id" : "alignment_ref",
     "optional" : false,
     "advanced" : false,
     "allow_multiple" : false,
@@ -217,8 +217,8 @@
                     "target_property": "workspace_name"
                 },
                 {
-                    "input_parameter": "source_ref",
-                    "target_property": "source_ref",
+                    "input_parameter": "alignment_ref",
+                    "target_property": "alignment_ref",
                     "target_type_transform": "resolved-ref"
                 },
                 {
