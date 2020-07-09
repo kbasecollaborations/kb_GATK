@@ -133,7 +133,7 @@ class kb_GATK:
 
         params['vcf_staging_file_path'] = output_dir + "sample.vcf"
         params['genome_or_assembly_ref'] = params['assembly_or_genome_ref']       
-
+        params['variation_object_name'] = params['output_variant_object']
         self.vu.save_variation_from_vcf(params)
 
         report = KBaseReport(self.callback_url)
