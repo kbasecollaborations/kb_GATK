@@ -81,7 +81,7 @@ class kb_GATK:
         
         #assembly_file = os.path.join(src, "reference/test_assembly.fa")
 
-        assembly_file = self.du.download_genome(params['genome_or_assembly_ref'], output_dir)['path']
+        assembly_file = self.du.download_genome(params['assembly_or_genome_ref'], output_dir)['path']
 
         #fwd_fastq = "/kb/module/test/bt_test_data/reads_1.fq"
         #rev_fastq = "/kb/module/test/bt_test_data/reads_2.fq"
