@@ -74,8 +74,8 @@ class kb_GATK:
 
         #TODO : need to add UUID in output_dir
 
-        #output_dir = os.path.join(self.shared_folder, str(uuid.uuid4()))
-        #os.mkdir(output_dir)
+        output_dir = os.path.join(self.shared_folder, str(uuid.uuid4()))
+        os.mkdir(output_dir)
 
         #dest = shutil.copytree(src, os.path.join(output_dir, "genome"))
         
@@ -87,6 +87,8 @@ class kb_GATK:
         #rev_fastq = "/kb/module/test/bt_test_data/reads_2.fq"
 
         output_dir = self.shared_folder + "/"  #TODO need to use uuid for storing all the intermediate results rather that using shared_folder.
+
+        output_dir = output_dir + "/"  
 
         self.gu.build_genome(assembly_file)
 
@@ -133,7 +135,7 @@ class kb_GATK:
 
         params['vcf_staging_file_path'] = output_dir + "sample.vcf"
         params['genome_or_assembly_ref'] = params['assembly_or_genome_ref']       
-        params['variation_object_name'] = params['output_variant_object']
+        #params['variation_object_name'] = params['output_variant_object']
         self.vu.save_variation_from_vcf(params)
 
         report = KBaseReport(self.callback_url)

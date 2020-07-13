@@ -15,7 +15,7 @@ module kb_GATK {
     typedef structure {
         string alignment_ref;
         string assembly_or_genome_ref;
-        string output_variant_object;
+        string variation_object_name;
         string snp_qd_filter;
         string snp_fs_filter;
         string snp_mq_filter;

@@ -34,7 +34,7 @@
      }
    },
    {
-    "id" : "output_variant_object",
+    "id" : "variation_object_name",
     "optional" : false,
     "advanced" : false,
     "allow_multiple" : false,
@@ -227,8 +227,8 @@
                    "target_type_transform": "resolved-ref"
                 },
                 {
-                   "input_parameter": "output_variant_object",
-                   "target_property": "output_variant_object"
+                   "input_parameter": "variation_object_name",
+                   "target_property": "variation_object_name"
                 }
             ],
             "output_mapping": [
