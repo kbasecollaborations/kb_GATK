@@ -96,7 +96,7 @@ class kb_GATK:
         self.gu.sort_bam_index(output_dir)
 
         self.gu.collect_alignment_and_insert_size_metrics(assembly_file, output_dir)
-   
+           
         self.gu.analyze_covariates( output_dir)
    
         self.gu.variant_calling(assembly_file, output_dir)
@@ -106,7 +106,6 @@ class kb_GATK:
         self.gu.filter_SNPs(assembly_file, "filtered_snps.vcf", output_dir, params)
    
         self.gu.filter_Indels(assembly_file, "filtered_indels.vcf", output_dir, params)
-   
         self.gu.exclude_filtered_variants(output_dir)
    
         self.gu.base_quality_score_recalibration(assembly_file, "recal_data.table", output_dir)
@@ -120,7 +119,6 @@ class kb_GATK:
         self.gu.filter_SNPs(assembly_file, "filtered_snps_final.vcf", output_dir, params)
    
         self.gu.filter_Indels(assembly_file, "filtered_indels_final.vcf", output_dir, params)
-
         os.system("grep   '##fileformat' " + output_dir + "filtered_snps_final.vcf > " + output_dir + "sample.vcf")
         cmd = "grep -v  '##' " + output_dir + "filtered_snps_final.vcf >> " + output_dir + "sample.vcf"
                                  
