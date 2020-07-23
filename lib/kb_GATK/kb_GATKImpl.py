@@ -72,7 +72,7 @@ class kb_GATK:
 
         assembly_file = self.du.download_genome(params['assembly_or_genome_ref'], output_dir)['path']
 
-        output_dir = output_dir + "/"
+        #output_dir = output_dir + "/"
 
         self.gu.build_genome(assembly_file)
         self.gu.index_assembly(assembly_file)
@@ -93,11 +93,12 @@ class kb_GATK:
         self.gu.filter_SNPs(assembly_file, "filtered_snps_final.vcf", output_dir, params)
         self.gu.filter_Indels(assembly_file, "filtered_indels_final.vcf", output_dir, params)
 
-        os.system("grep   '##fileformat' " + output_dir + "filtered_snps_final.vcf > " + output_dir + "sample.vcf")
-        cmd = "grep -v  '##' " + output_dir + "filtered_snps_final.vcf >> " + output_dir + "sample.vcf"
+
+        os.system("grep   '##fileformat' " + output_dir + "/filtered_snps_final.vcf > " + output_dir + "/sample.vcf")
+        cmd = "grep -v  '##' " + output_dir + "/filtered_snps_final.vcf >> " + output_dir + "/sample.vcf"
         os.system(cmd)            # TODO : need to remove system command after fixing variationUtils.
 
-        params['vcf_staging_file_path'] = output_dir + "sample.vcf"
+        params['vcf_staging_file_path'] = output_dir + "/sample.vcf"
         params['genome_or_assembly_ref'] = params['assembly_or_genome_ref']
         self.vu.save_variation_from_vcf(params)
 
