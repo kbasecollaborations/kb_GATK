@@ -114,4 +114,3 @@ parameter-groups :
 description : |
     <p>GATK is a collection of command-line tools for analyzing high-throughput sequencing data with a primary focus on variant discovery. The tools can be used individually or chained together into complete workflows.</p>
     <p> pls refer to https://gatk.broadinstitute.org/hc/en-us/categories/360002302312 for documentation </p>
-    <p> </p>

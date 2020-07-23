@@ -8,8 +8,6 @@ from installed_clients.KBaseReportClient import KBaseReport
 from kb_GATK.Utils.GATKUtils import GATKUtils
 from kb_GATK.Utils.DownloadAlignmentUtils import DownloadAlignmentUtils
 
-
-import shutil
 #END_HEADER
 
 
@@ -49,7 +47,6 @@ class kb_GATK:
         #END_CONSTRUCTOR
         pass
 
-
     def run_kb_GATK(self, ctx, params):
         """
         This example function accepts any number of parameters and returns results in a KBaseReport
@@ -60,77 +57,52 @@ class kb_GATK:
         # ctx is the context object
         # return variables are: output
         #BEGIN run_kb_GATK
-      
-        
 
         source_ref = params['alignment_ref']
         alignment_out = self.du.downloadreadalignment(source_ref, params, self.callback_url)
-        sam_file = os.path.join(alignment_out['destination_dir'],"reads_alignment.sam")
+        sam_file = os.path.join(alignment_out['destination_dir'], "reads_alignment.sam")
 
+        # src = "/kb/module/test/genome"
 
-        #sam_file = "/kb/module/test/reads_alignment.sam"
-        src = "/kb/module/test/genome"
-        #output_dir = self.shared_folder
-
-        #TODO : need to add UUID in output_dir
+        # output_dir = self.shared_folder
+        # TODO : need to add UUID in output_dir
 
         output_dir = os.path.join(self.shared_folder, str(uuid.uuid4()))
         os.mkdir(output_dir)
 
         assembly_file = self.du.download_genome(params['assembly_or_genome_ref'], output_dir)['path']
 
-        #output_dir = self.shared_folder + "/"  #TODO need to use uuid for storing all the intermediate results rather that using shared_folder.
-
-        output_dir = output_dir + "/"  
+        output_dir = output_dir + "/"
 
         self.gu.build_genome(assembly_file)
-
         self.gu.index_assembly(assembly_file)
-
         self.gu.generate_sequence_dictionary(assembly_file)
-
-        #self.gu.mapping_genome(assembly_file, fwd_fastq, rev_fastq, output_dir )
-
         self.gu.duplicate_marking(output_dir, sam_file)
-
         self.gu.sort_bam_index(output_dir)
-
         self.gu.collect_alignment_and_insert_size_metrics(assembly_file, output_dir)
-           
-        self.gu.analyze_covariates( output_dir)
-   
+        self.gu.analyze_covariates(output_dir)
         self.gu.variant_calling(assembly_file, output_dir)
-   
         self.gu.extract_variants(assembly_file, output_dir)
-   
         self.gu.filter_SNPs(assembly_file, "filtered_snps.vcf", output_dir, params)
-   
         self.gu.filter_Indels(assembly_file, "filtered_indels.vcf", output_dir, params)
         self.gu.exclude_filtered_variants(output_dir)
-   
         self.gu.base_quality_score_recalibration(assembly_file, "recal_data.table", output_dir)
-   
         self.gu.apply_BQSR(assembly_file, "recal_data.table", output_dir)
-   
         self.gu.base_quality_score_recalibration(assembly_file, "post_recal_data.table", output_dir)
-   
         self.gu.apply_BQSR(assembly_file,  "post_recal_data.table", output_dir)
-   
         self.gu.filter_SNPs(assembly_file, "filtered_snps_final.vcf", output_dir, params)
-   
         self.gu.filter_Indels(assembly_file, "filtered_indels_final.vcf", output_dir, params)
+
         os.system("grep   '##fileformat' " + output_dir + "filtered_snps_final.vcf > " + output_dir + "sample.vcf")
         cmd = "grep -v  '##' " + output_dir + "filtered_snps_final.vcf >> " + output_dir + "sample.vcf"
-                                 
-        os.system(cmd)            #TODO : need to remove system command after fixing variationUtils.
+        os.system(cmd)            # TODO : need to remove system command after fixing variationUtils.
 
         params['vcf_staging_file_path'] = output_dir + "sample.vcf"
-        params['genome_or_assembly_ref'] = params['assembly_or_genome_ref']       
-        #params['variation_object_name'] = params['output_variant_object']
+        params['genome_or_assembly_ref'] = params['assembly_or_genome_ref']
         self.vu.save_variation_from_vcf(params)
 
         report = KBaseReport(self.callback_url)
-        report_info = report.create({'report': {'objects_created':[],
+        report_info = report.create({'report': {'objects_created': [],
                                                 'text_message': 'Success'},
                                                 'workspace_name': params['workspace_name']})
         output = {
@@ -145,6 +117,7 @@ class kb_GATK:
                              'output is not type dict as required.')
         # return the results
         return [output]
+
     def status(self, ctx):
         #BEGIN_STATUS
         returnVal = {'state': "OK",

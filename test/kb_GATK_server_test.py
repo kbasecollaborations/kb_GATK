@@ -66,18 +66,24 @@ class kb_GATKTest(unittest.TestCase):
         ret = self.serviceImpl.run_kb_GATK(self.ctx, { 'workspace_name': 'man4ish_gupta:narrative_1592707902187',
                                                        'assembly_or_genome_ref':'43745/33/6',
                                                        'variation_object_name':'output_obj',
-                                                       'alignment_ref':'43745/118/1',
-                                                       'snp_qd_filter' : '2.0',
-                                                       'snp_fs_filter':'60.0',
-                                                       'snp_mq_filter':'40.0',
-                                                       'snp_sor_filter':'4.0',
-                                                       'snp_mqrankSum_filter':'-12.5',
-                                                       'snp_readposranksum_filter':'-8.0',
-                                                       'indel_qd_filter' : '2.0',
-                                                       'indel_fs_filter':'200.0',
-                                                       'indel_mq_filter':'40.0',
-                                                       'indel_sor_filter':'10.0',
-                                                       'indel_mqrankSum_filter':'-12.5',
-                                                       'indel_readposranksum_filter':'-8.0'
+                                                       'alignment_ref':'43745/111/4',
+                                                       'snp_filter':
+                                                       {
+                                                          'snp_qd_filter' : '2.0',
+                                                          'snp_fs_filter':'60.0',
+                                                          'snp_mq_filter':'40.0',
+                                                          'snp_sor_filter':'4.0',
+                                                          'snp_mqrankSum_filter':'-12.5',
+                                                          'snp_readposranksum_filter':'-8.0'
+                                                       },
+                                                       'indel_filter':
+                                                       {
+                                                          'indel_qd_filter' : '2.0',
+                                                          'indel_fs_filter':'200.0',
+                                                          'indel_mq_filter':'40.0',
+                                                          'indel_sor_filter':'10.0',
+                                                          'indel_mqrankSum_filter':'-12.5',
+                                                          'indel_readposranksum_filter':'-8.0'
+                                                       }
                                                      }
                                           )
