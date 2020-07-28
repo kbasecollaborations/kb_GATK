@@ -227,6 +227,14 @@
                    "target_type_transform": "resolved-ref"
                 },
                 {
+                   "input_parameter": "snp_filter",
+                   "target_property": "snp_filter"
+                },
+                {
+                   "input_parameter": "indel_filter",
+                   "target_property": "indel_filter"
+                },
+                {
                    "input_parameter": "variation_object_name",
                    "target_property": "variation_object_name"
                 }

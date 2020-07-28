@@ -40,5 +40,4 @@ module kb_GATK {
     } Inparams;
 
     funcdef run_kb_GATK(Inparams params) returns (ReportResults output) authentication required;
-
 };
