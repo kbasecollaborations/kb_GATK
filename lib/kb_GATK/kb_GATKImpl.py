@@ -57,7 +57,7 @@ class kb_GATK:
         # ctx is the context object
         # return variables are: output
         #BEGIN run_kb_GATK
-
+        print(params)
         source_ref = params['alignment_ref']
         alignment_out = self.du.downloadreadalignment(source_ref, params, self.callback_url)
         sam_file = os.path.join(alignment_out['destination_dir'], "reads_alignment.sam")
