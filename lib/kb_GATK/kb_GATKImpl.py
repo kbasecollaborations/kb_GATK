@@ -114,7 +114,7 @@ class kb_GATK:
         self.gu.duplicate_marking(output_dir, sam_file)
         self.gu.sort_bam_index(output_dir)
         self.gu.collect_alignment_and_insert_size_metrics(assembly_file, output_dir)
-        self.gu.analyze_covariates(output_dir)
+        #self.gu.analyze_covariates(output_dir)
 
         #Todo: avoid writing intermediate fies to save space and time I/O. 
         self.gu.variant_calling(assembly_file, output_dir)
