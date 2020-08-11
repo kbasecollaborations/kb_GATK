@@ -22,6 +22,7 @@
       "valid_ws_types" : ["KBaseRNASeq.RNASeqAlignment"]
      }
     },
+     
     {
     "id" : "assembly_or_genome_ref",
     "optional" : false,
@@ -30,9 +31,43 @@
     "default_values" : [ "" ],
     "field_type" : "text",
     "text_options" : {
-      "valid_ws_types" : ["KBaseGenomeAnnotations.Assembly", "KBaseGenomes.ContigSet" ]
+      "valid_ws_types" : ["KBaseGenomeAnnotations.Assembly", "KBaseGenomes.Genome" ]
      }
    },
+   {
+    "id" : "input_sample_set",
+    "optional" : false,
+    "advanced" : false,
+    "allow_multiple" : false,
+    "default_values" : [ "" ],
+    "field_type" : "text",
+    "text_options" : {
+      "valid_ws_types" : ["KBaseSets.SampleSet"]
+     }
+   },
+   
+   {
+    "id" : "strain_info",
+    "optional" : false,
+    "advanced" : false,
+    "allow_multiple" : false,
+    "default_values" : [ "" ],
+    "field_type" : "textsubdata",
+    "textsubdata_options" : {
+      "subdata_selection": {
+        "parameter_id" : "input_sample_set",
+        "subdata_included" : ["samples/[*]/id", "samples/[*]/name"],
+        "path_to_subdata": ["samples"],
+        "selection_id" : "id",
+        "selection_description" : ["name"]
+      },
+      "multiselection":false,
+      "show_src_obj":true,
+      "allow_custom":false
+    }
+  },
+   
+   
    {
     "id" : "variation_object_name",
     "optional" : false,
@@ -142,47 +177,11 @@
      }
    },
    {
-    "id" : "indel_mq_filter",
-    "optional" : false,
-    "advanced" : true,
-    "allow_multiple" : false,
-    "default_values" : ["40.0"],
-    "field_type" : "text",
-    "text_options" : {
-      "valid_ws_types" : [ ],
-      "is_output_name" : false
-     }
-   },
-   {
     "id" : "indel_sor_filter",
     "optional" : false,
     "advanced" : true,
     "allow_multiple" : false,
     "default_values" : ["4.0"],
-    "field_type" : "text",
-    "text_options" : {
-      "valid_ws_types" : [ ],
-      "is_output_name" : false
-     }
-   },
-   {
-    "id" : "indel_mqrankSum_filter",
-    "optional" : false,
-    "advanced" : true,
-    "allow_multiple" : false,
-    "default_values" : ["-12.5"],
-    "field_type" : "text",
-    "text_options" : {
-      "valid_ws_types" : [ ],
-      "is_output_name" : false
-     }
-   },
-   {
-    "id" : "indel_readposranksum_filter",
-    "optional" : false,
-    "advanced" : true,
-    "allow_multiple" : false,
-    "default_values" : ["-8.0"],
     "field_type" : "text",
     "text_options" : {
       "valid_ws_types" : [ ],
@@ -194,14 +193,16 @@
       {
         "id": "snp_filter",
         "parameters": ["snp_qd_filter", "snp_fs_filter", "snp_mq_filter", "snp_sor_filter", "snp_mqrankSum_filter", "snp_readposranksum_filter"],
-        "optional": true,
+        "optional": false,
+        "advanced" : true,
         "allow_multiple": false,
         "with_border": true
        },
        {
         "id": "indel_filter",
-        "parameters": ["indel_qd_filter", "indel_fs_filter", "indel_mq_filter", "indel_sor_filter", "indel_mqrankSum_filter", "indel_readposranksum_filter"],
-        "optional": true,
+        "parameters": ["indel_qd_filter", "indel_fs_filter", "indel_sor_filter"],
+        "optional": false,
+        "advanced" : true,
         "allow_multiple": false,
         "with_border": true
        }
@@ -226,6 +227,16 @@
                    "target_property": "assembly_or_genome_ref",
                    "target_type_transform": "resolved-ref"
                 },
+                {
+                   "input_parameter": "input_sample_set",
+                   "target_property": "input_sample_set",
+                   "target_type_transform": "resolved-ref"
+                },
+                {
+                   "input_parameter": "strain_info",
+                   "target_property": "strain_info"
+                },
+                
                 {
                    "input_parameter": "snp_filter",
                    "target_property": "snp_filter"

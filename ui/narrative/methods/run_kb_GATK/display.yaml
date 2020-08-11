@@ -5,7 +5,6 @@ name: kb_GATK
 
 tooltip: |
     Perform downstream analysis to generate vcf file.
-
 screenshots: []
 
 icon: icon.png
@@ -34,6 +33,16 @@ parameters :
             Assembly or Genome
         short-hint : |
             Select the reference Assembly or Genome for the read alignment.
+    input_sample_set:
+        ui-name : |
+            Sample set
+        short-hint : |
+            Sample set with strain information
+    strain_info :
+        ui-name : |
+            Strain information
+        short-hint : |
+            Select sample from the corresponding sample set
     snp_qd_filter:
         ui-name : |
             QD Filter (<)
@@ -74,26 +83,11 @@ parameters :
             FS Filter (>)
         short-hint : |
             FS Filter
-    indel_mq_filter:
-        ui-name : |
-            MQ Filter (<)
-        short-hint : |
-            MQ Filter
     indel_sor_filter:
         ui-name : |
             SOR Filter (>)
         short-hint : |
-            SOR Filter
-    indel_mqrankSum_filter:
-        ui-name : |
-            MQRank Sum Filter (<)
-        short-hint : |
-            MQRank Sum Filter
-    indel_readposranksum_filter:
-        ui-name : |
-            Read Pos Rank Sum Filter (<)
-        short-hint : |
-            Read Pos Rank Sum Filter        
+            SOR Filter      
     variation_object_name :
         ui-name : |
             Output Variant Object
@@ -110,7 +104,6 @@ parameter-groups :
             Indel Filter options
         short-hint : |
             Indel Filter options        
-
 description : |
     <p>GATK is a collection of command-line tools for analyzing high-throughput sequencing data with a primary focus on variant discovery.</p>
     <p> pls refer to https://gatk.broadinstitute.org/hc/en-us/categories/360002302312 for documentation </p>

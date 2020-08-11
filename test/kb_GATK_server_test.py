@@ -63,10 +63,11 @@ class kb_GATKTest(unittest.TestCase):
         #
         # Check returned data with
         # self.assertEqual(ret[...], ...) or other unittest methods
-        ret = self.serviceImpl.run_kb_GATK(self.ctx, { 'workspace_name': 'man4ish_gupta:narrative_1592707902187',
-                                                       'assembly_or_genome_ref':'43745/33/6',
-                                                       'variation_object_name':'output_obj',
-                                                       'alignment_ref':'43745/111/4',
+        ret = self.serviceImpl.run_kb_GATK(self.ctx, { 'workspace_name': 'pranjan77:narrative_1596711680507',
+                                                       'assembly_or_genome_ref':'52890/2/1',
+                                                       'variation_object_name':'output_var_obj',
+                                                       'input_sample_set':'52890/11/1',
+                                                       'alignment_ref':'52890/7/1',
                                                        'snp_filter':
                                                        {
                                                           'snp_qd_filter' : '2.0',
@@ -80,10 +81,8 @@ class kb_GATKTest(unittest.TestCase):
                                                        {
                                                           'indel_qd_filter' : '2.0',
                                                           'indel_fs_filter':'200.0',
-                                                          'indel_mq_filter':'40.0',
-                                                          'indel_sor_filter':'10.0',
-                                                          'indel_mqrankSum_filter':'-12.5',
-                                                          'indel_readposranksum_filter':'-8.0'
+                                                          'indel_sor_filter':'10.0'
                                                        }
                                                      }
                                           )
+

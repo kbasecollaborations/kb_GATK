@@ -7,6 +7,7 @@ from installed_clients.VariationUtilClient import VariationUtil
 from installed_clients.KBaseReportClient import KBaseReport
 from kb_GATK.Utils.GATKUtils import GATKUtils
 from kb_GATK.Utils.DownloadAlignmentUtils import DownloadAlignmentUtils
+from installed_clients.WorkspaceClient import Workspace
 
 #END_HEADER
 
@@ -39,6 +40,8 @@ class kb_GATK:
         #BEGIN_CONSTRUCTOR
         self.callback_url = os.environ['SDK_CALLBACK_URL']
         self.shared_folder = config['scratch']
+        self.ws_url = config['workspace-url']
+        self.wsc = Workspace(self.ws_url)
         self.gu = GATKUtils()
         logging.basicConfig(format='%(created)s %(levelname)s: %(message)s',
                             level=logging.INFO)
@@ -62,17 +65,48 @@ class kb_GATK:
         alignment_out = self.du.downloadreadalignment(source_ref, params, self.callback_url)
         sam_file = os.path.join(alignment_out['destination_dir'], "reads_alignment.sam")
 
-        # src = "/kb/module/test/genome"
+        '''
+        #Todo Reading sample set and sample strains information
+        '''
 
-        # output_dir = self.shared_folder
-        # TODO : need to add UUID in output_dir
+        '''
+        command.extend(["-filter-name", "\"QD_filter\"", "-filter", "\"QD", "<", params['snp_filter']['snp_qd_filter'] + "\""])
+        command.extend(["-filter-name", "\"FS_filter\"", "-filter", "\"FS", "<", params['snp_filter']['snp_fs_filter'] + "\""])
+        command.extend(["-filter-name", "\"MQ_filter\"", "-filter", "\"MQ", "<", params['snp_filter']['snp_mq_filter'] + "\""])
+        command.extend(["-filter-name", "\"SOR_filter\"", "-filter", "\"SOR", "<", params['snp_filter']['snp_sor_filter'] + "\""])
+        command.extend(["-filter-name", "\"MQRankSum_filter\"", "-filter", "\"MQRankSum", "<", params['snp_filter']['snp_mqrankSum_filter'] + "\""])
+        command.extend(["-filter-name", "\"ReadPosRankSum_filter\"", "-filter", "\"ReadPosRankSum", "<", params['snp_filter']['snp_readposranksum_filter'] + "\""])
+        '''
 
         output_dir = os.path.join(self.shared_folder, str(uuid.uuid4()))
         os.mkdir(output_dir)
 
-        assembly_file = self.du.download_genome(params['assembly_or_genome_ref'], output_dir)['path']
+        genome_or_assembly_ref = params['assembly_or_genome_ref']
+        obj_type = self.wsc.get_object_info3({
+            'objects':[{
+                'ref': genome_or_assembly_ref
+                      }]})['infos'][0][2]
+        if ('KBaseGenomes.Genome' in obj_type):
+            genome_ref = genome_or_assembly_ref
+            subset = self.wsc.get_object_subset([{
+                    'included': ['/assembly_ref'],
+                    'ref': genome_ref
+                }])
+            assembly_ref = subset[0]['data']['assembly_ref']
+        elif ('KBaseGenomeAnnotations.Assembly' in obj_type):
+            assembly_ref = genome_or_assembly_ref
+        else:
+            raise ValueError(obj_type + ' is not the right input for this method. '
+                                      + 'Valid input include KBaseGenomes.Genome or '
+                                      + 'KBaseGenomeAnnotations.Assembly ')       
+
+        assembly_file = self.du.download_genome(assembly_ref, output_dir)['path']
 
         #output_dir = output_dir + "/"
+
+        #Todo: check time for building index file or donwload from cache. 
+        #Todo: To discuss about cache_id to be used.
+        #Todo: In case of copying genome, find the way of finding original genome (ref id) for getting original cache id.
 
         self.gu.build_genome(assembly_file)
         self.gu.index_assembly(assembly_file)
@@ -81,6 +115,8 @@ class kb_GATK:
         self.gu.sort_bam_index(output_dir)
         self.gu.collect_alignment_and_insert_size_metrics(assembly_file, output_dir)
         self.gu.analyze_covariates(output_dir)
+
+        #Todo: avoid writing intermediate fies to save space and time I/O. 
         self.gu.variant_calling(assembly_file, output_dir)
         self.gu.extract_variants(assembly_file, output_dir)
         self.gu.filter_SNPs(assembly_file, "filtered_snps.vcf", output_dir, params)
@@ -91,16 +127,30 @@ class kb_GATK:
         self.gu.base_quality_score_recalibration(assembly_file, "post_recal_data.table", output_dir)
         self.gu.apply_BQSR(assembly_file,  "post_recal_data.table", output_dir)
         self.gu.filter_SNPs(assembly_file, "filtered_snps_final.vcf", output_dir, params)
+      
+        #Todo: To save indels also using VariationUtils or merge with snps and sort them with chr & pos and save using variaiotiontuils.
+        #Todo: To get an example for saving structural variants(specially CNV) and compare with standard vcf output.
+
         self.gu.filter_Indels(assembly_file, "filtered_indels_final.vcf", output_dir, params)
 
-
+        '''
         os.system("grep   '##fileformat' " + output_dir + "/filtered_snps_final.vcf > " + output_dir + "/sample.vcf")
         cmd = "grep -v  '##' " + output_dir + "/filtered_snps_final.vcf >> " + output_dir + "/sample.vcf"
         os.system(cmd)            # TODO : need to remove system command after fixing variationUtils.
+        '''
 
-        params['vcf_staging_file_path'] = output_dir + "/sample.vcf"
-        params['genome_or_assembly_ref'] = params['assembly_or_genome_ref']
-        self.vu.save_variation_from_vcf(params)
+        #Todo : check existence of final filtered finals snps.
+        #Todo : chnage assembly_or_genome_ref to genome_or_assembly_ref
+ 
+        save_variation_params = {'workspace_name': params['workspace_name'],
+            'genome_or_assembly_ref': params['assembly_or_genome_ref'],      
+            'sample_set_ref':params['input_sample_set'],
+            'sample_attribute_name':'sample_attr',
+            'vcf_staging_file_path': output_dir + "/filtered_snps_final.vcf",
+            'variation_object_name': params['variation_object_name']
+            } 
+
+        self.vu.save_variation_from_vcf(save_variation_params)
 
         report = KBaseReport(self.callback_url)
         report_info = report.create({'report': {'objects_created': [],

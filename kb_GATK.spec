@@ -24,15 +24,14 @@ module kb_GATK {
     typedef structure {
         string indel_qd_filter;
         string indel_fs_filter;
-        string indel_mq_filter;
         string indel_sor_filter;
-        string indel_mqrankSum_filter;
-        string indel_readposranksum_filter;
     } Indel_Filter_Options;   
  
     typedef structure {
         string workspace_name;
         string alignment_ref;
+        string input_sample_set;
+        string strain_info;
         string assembly_or_genome_ref;
         string variation_object_name;
         Snp_Filter_Options snp_filter;
