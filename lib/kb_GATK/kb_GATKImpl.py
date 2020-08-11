@@ -141,7 +141,9 @@ class kb_GATK:
 
         #Todo : check existence of final filtered finals snps.
         #Todo : chnage assembly_or_genome_ref to genome_or_assembly_ref
- 
+
+        #Todo: to derive name of sample_attribute_name from sample set ref by prefixing/suffixing. Attribute mapping should have one sample.
+  
         save_variation_params = {'workspace_name': params['workspace_name'],
             'genome_or_assembly_ref': params['assembly_or_genome_ref'],      
             'sample_set_ref':params['input_sample_set'],

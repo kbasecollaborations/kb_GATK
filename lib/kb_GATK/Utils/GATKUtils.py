@@ -1,5 +1,6 @@
 import subprocess
 import os
+import logging
 
 class GATKUtils:
 
@@ -7,6 +8,31 @@ class GATKUtils:
         self.path = "/kb/module/deps"
         pass
 
+    def run_cmd(self, cmd):
+        """
+        This function runs a third party command line tool
+        eg. bgzip etc.
+        :param command: command to be run
+        :return: success
+        """
+        command = " ".join(cmd)
+        logging.info("Running command " + command)
+        cmdProcess = subprocess.Popen(command,
+                                      stdout=subprocess.PIPE,
+                                      stderr=subprocess.STDOUT,
+                                      shell=True)
+        for line in cmdProcess.stdout:
+            logging.info(line.decode("utf-8").rstrip())
+            cmdProcess.wait()
+            logging.info('return code: ' + str(cmdProcess.returncode))
+            if cmdProcess.returncode != 0:
+                raise ValueError('Error in running command with return code: '
+                                 + command
+                                 + str(cmdProcess.returncode) + '\n')
+        logging.info("command " + command + " ran successfully")
+        return "success"
+
+    '''
     def run_cmd(self, command):
         cmd = " ".join(command)
 
@@ -24,6 +50,7 @@ class GATKUtils:
             print("OSError > ", e.errno)
             print("OSError > ", e.strerror)
             print("OSError > ", e.filename)
+    '''
 
     def validate_params(self, params):
         if 'assembly_or_genome_reff' not in params:
@@ -40,7 +67,7 @@ class GATKUtils:
     def build_genome(self, assembly_file):
         command = ["bwa"]
         command.append("index")
-        command.extend(["-a", "bwts"])
+        #command.extend(["-a", "bwtsw"])   #Todo : need to figure out usage of bwtsw option. 
         command.append(assembly_file)
         self.run_cmd(command)
 
