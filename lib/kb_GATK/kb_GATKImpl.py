@@ -60,7 +60,6 @@ class kb_GATK:
         # ctx is the context object
         # return variables are: output
         #BEGIN run_kb_GATK
-        print(params)
         source_ref = params['alignment_ref']
         alignment_out = self.du.downloadreadalignment(source_ref, params, self.callback_url)
         sam_file = os.path.join(alignment_out['destination_dir'], "reads_alignment.sam")
@@ -77,7 +76,8 @@ class kb_GATK:
         command.extend(["-filter-name", "\"MQRankSum_filter\"", "-filter", "\"MQRankSum", "<", params['snp_filter']['snp_mqrankSum_filter'] + "\""])
         command.extend(["-filter-name", "\"ReadPosRankSum_filter\"", "-filter", "\"ReadPosRankSum", "<", params['snp_filter']['snp_readposranksum_filter'] + "\""])
         '''
-
+        print(params)
+        strain_info = params['strain_info']
         output_dir = os.path.join(self.shared_folder, str(uuid.uuid4()))
         os.mkdir(output_dir)
 
@@ -139,6 +139,9 @@ class kb_GATK:
         os.system(cmd)            # TODO : need to remove system command after fixing variationUtils.
         '''
 
+
+        vcf_filepath = self.gu.index_vcf_file(output_dir + "/filtered_snps_final.vcf")
+        reheader_vcf_file = self.gu.reheader(vcf_filepath, strain_info)
         #Todo : check existence of final filtered finals snps.
         #Todo : chnage assembly_or_genome_ref to genome_or_assembly_ref
 
@@ -148,7 +151,7 @@ class kb_GATK:
             'genome_or_assembly_ref': params['assembly_or_genome_ref'],      
             'sample_set_ref':params['input_sample_set'],
             'sample_attribute_name':'sample_attr',
-            'vcf_staging_file_path': output_dir + "/filtered_snps_final.vcf",
+            'vcf_staging_file_path': reheader_vcf_file,
             'variation_object_name': params['variation_object_name']
             } 
 

@@ -1,6 +1,7 @@
 import subprocess
 import os
 import logging
+import gzip
 
 class GATKUtils:
 
@@ -16,6 +17,7 @@ class GATKUtils:
         :return: success
         """
         command = " ".join(cmd)
+        print(command)
         logging.info("Running command " + command)
         cmdProcess = subprocess.Popen(command,
                                       stdout=subprocess.PIPE,
@@ -86,12 +88,12 @@ class GATKUtils:
         command.extend(["Output=", output_dict])
         self.run_cmd(command)
 
-    def mapping_genome(self, ref_genome, rev_fastq, fwd_fastq, output_dir):
+    def mapping_genome(self, ref_genome, rev_fastq, fwd_fastq, output_dir, strain_info):
         command = ["bwa"]
         command.append("mem")
         command.extend(["-t", "32"])
         command.extend(["-M", "-R"])
-        command.append("\"@RG\\tID:sample_1\\tLB:sample_1\\tPL:ILLUMINA\\tPM:HISEQ\\tSM:sample_1\" ")
+        command.append("\"@RG\\tID:"+ strain_info + "\\tLB:" + strain_info + "\\tPL:ILLUMINA\\tPM:HISEQ\\tSM:" + strain_info + "\" ")
         command.append(ref_genome)
         command.append(rev_fastq)
         command.append(fwd_fastq)
@@ -235,3 +237,36 @@ class GATKUtils:
         command.extend(["-after", os.path.join(output_dir, "post_recal_data.table")])
         command.extend(["-plots", os.path.join(output_dir, "recalibration_plots.pdf")])
         self.run_cmd(command)
+
+    def bgzip_vcf_file(self, filepath):
+        bzfilepath = filepath + ".gz"
+        command = ["bgzip", filepath]
+        self.run_cmd(command)
+        return bzfilepath        
+
+    def index_vcf_file(self, filepath):
+        bzfilepath = self.bgzip_vcf_file(filepath)
+        command  = ["tabix", "-p", "vcf", bzfilepath]
+        return bzfilepath       
+
+    def reheader(self, filepath, strain_info):
+        reheader_vcf_path = filepath.replace(".vcf.gz", "") + "_reheader.vcf.gz"
+        new_header_path = filepath.replace(".vcf.gz", "") + "_newheader.vcf"
+        header_path = filepath.replace(".vcf.gz", "") + "_header.vcf"
+        header_cmd = ["tabix -H", filepath, ">", header_path]
+        self.run_cmd(header_cmd)
+
+        pattern = 's/sample_1/' + strain_info + '/'
+        replace_cmd = ['sed' , pattern, header_path, ">",  new_header_path]
+        self.run_cmd(replace_cmd)
+
+        command = ["tabix -r", new_header_path, filepath, ">", reheader_vcf_path]
+        self.run_cmd(command)
+
+        return reheader_vcf_file
+'''
+if __name__ == "__main__":
+   GU = GATKUtils()
+   vcf_filepath = GU.index_vcf_file("vcf_4cce3afe-7fd0-41a5-9285-ed0b627253c5.vcf")
+   GU.reheader(vcf_filepath, "rioqrwyeq")
+''' 
