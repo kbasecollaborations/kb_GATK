@@ -58,8 +58,8 @@
         "parameter_id" : "input_sample_set",
         "subdata_included" : ["samples/[*]/id", "samples/[*]/name"],
         "path_to_subdata": ["samples"],
-        "selection_id" : "id",
-        "selection_description" : ["name"]
+        "selection_id" : "name",
+        "selection_description" : ["id"]
       },
       "multiselection":false,
       "show_src_obj":true,
