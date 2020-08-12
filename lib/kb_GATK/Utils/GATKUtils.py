@@ -247,6 +247,7 @@ class GATKUtils:
     def index_vcf_file(self, filepath):
         bzfilepath = self.bgzip_vcf_file(filepath)
         command  = ["tabix", "-p", "vcf", bzfilepath]
+        self.run_cmd(command)
         return bzfilepath       
 
     def reheader(self, filepath, strain_info):
@@ -263,10 +264,10 @@ class GATKUtils:
         command = ["tabix -r", new_header_path, filepath, ">", reheader_vcf_path]
         self.run_cmd(command)
 
-        return reheader_vcf_file
+        return reheader_vcf_path
 '''
 if __name__ == "__main__":
    GU = GATKUtils()
-   vcf_filepath = GU.index_vcf_file("vcf_4cce3afe-7fd0-41a5-9285-ed0b627253c5.vcf")
+   vcf_filepath = GU.index_vcf_file("filtered_snps_final.vcf")
    GU.reheader(vcf_filepath, "rioqrwyeq")
 ''' 
