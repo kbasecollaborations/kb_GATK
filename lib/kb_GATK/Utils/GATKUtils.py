@@ -139,6 +139,7 @@ class GATKUtils:
 
     def variant_calling(self, assembly_file, output_dir):
         command = ["java"]
+        command.append("-Xmx4G")
         command.extend(["-jar", os.path.join(self.path, "gatk-4.1.3.0/gatk-package-4.1.3.0-local.jar")])
         command.append("HaplotypeCaller")
         command.extend(["-R", assembly_file])
@@ -148,6 +149,7 @@ class GATKUtils:
 
     def extract_variants(self, assembly_file, output_dir):
         command1 = ["java"]
+        command1.append("-Xmx4G")
         command1.extend(["-jar", os.path.join(self.path, "gatk-4.1.3.0/gatk-package-4.1.3.0-local.jar")])
         command1.append("SelectVariants")
         command1.extend(["-R", assembly_file])
@@ -157,6 +159,7 @@ class GATKUtils:
         self.run_cmd(command1)
 
         command2 = ["java"]
+        command2.append("-Xmx4G")
         command2.extend(["-jar", os.path.join(self.path, "gatk-4.1.3.0/gatk-package-4.1.3.0-local.jar")])
         command2.append("SelectVariants")
         command2.extend(["-R", assembly_file])
@@ -168,6 +171,7 @@ class GATKUtils:
 
     def filter_SNPs(self, assembly_file, output_file, output_dir, params):
         command  = ["java"]
+        command.append("-Xmx4G")
         command.extend(["-jar", os.path.join(self.path,"gatk-4.1.3.0/gatk-package-4.1.3.0-local.jar")])
         command.append("VariantFiltration")
         command.extend(["-R", assembly_file])
@@ -183,6 +187,7 @@ class GATKUtils:
 
     def filter_Indels(self, assembly_file, output_file, output_dir, params):
         command  = ["java"]
+        command.append("-Xmx4G")
         command.extend(["-jar", os.path.join(self.path,"gatk-4.1.3.0/gatk-package-4.1.3.0-local.jar")])
         command.append("VariantFiltration")
         command.extend(["-R", assembly_file])
@@ -195,6 +200,7 @@ class GATKUtils:
 
     def exclude_filtered_variants(self, output_dir):
         command1 = ["java"]
+        command1.append("-Xmx4G")
         command1.extend(["-jar", os.path.join(self.path, "gatk-4.1.3.0/gatk-package-4.1.3.0-local.jar")])
         command1.extend(["SelectVariants", "--exclude-filtered"])
         command1.extend(["-V", os.path.join(output_dir, "filtered_snps.vcf")])
@@ -202,6 +208,7 @@ class GATKUtils:
         self.run_cmd(command1)
 
         command2 = ["java"]
+        command2.append("-Xmx4G")
         command2.extend(["-jar", os.path.join(self.path, "gatk-4.1.3.0/gatk-package-4.1.3.0-local.jar")])
         command2.extend(["SelectVariants", "--exclude-filtered"])
         command2.extend(["-V", os.path.join(output_dir, "filtered_indels.vcf")])
@@ -210,6 +217,7 @@ class GATKUtils:
 
     def base_quality_score_recalibration(self, assembly_file, data_table, output_dir):
         command = ["java"]
+        command.append("-Xmx4G")
         command.extend(["-jar", os.path.join(self.path, "gatk-4.1.3.0/gatk-package-4.1.3.0-local.jar")])
         command.append("BaseRecalibrator")
         command.extend(["-R", assembly_file])
@@ -221,6 +229,7 @@ class GATKUtils:
     
     def apply_BQSR(self, assembly_file, data_table, output_dir):
         command = ["java"]
+        command.append("-Xmx4G")
         command.extend(["-jar", os.path.join(self.path, "gatk-4.1.3.0/gatk-package-4.1.3.0-local.jar")])
         command.append("ApplyBQSR")
         command.extend(["-R", assembly_file])
@@ -231,6 +240,7 @@ class GATKUtils:
 
     def analyze_covariates(self, output_dir):
         command = ["java"]
+        command.append("-Xmx4G")
         command.extend(["-jar", os.path.join(self.path,"gatk-4.1.3.0/gatk-package-4.1.3.0-local.jar")])
         command.append("AnalyzeCovariates")
         command.extend(["-before", os.path.join(output_dir,"recal_data.table")])

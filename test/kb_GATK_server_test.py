@@ -86,4 +86,3 @@ class kb_GATKTest(unittest.TestCase):
                                                        }
                                                      }
                                           )
-
