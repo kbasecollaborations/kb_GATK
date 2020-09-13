@@ -34,26 +34,6 @@ class GATKUtils:
         logging.info("command " + command + " ran successfully")
         return "success"
 
-    '''
-    def run_cmd(self, command):
-        cmd = " ".join(command)
-
-        try:
-            process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
-            stdout, stderr = process.communicate()
-            if stdout:
-                print("ret> ", process.returncode)
-                print("OK> output ", stdout)
-            if stderr:
-                print("ret> ", process.returncode)
-                print("Error> error ", stderr.strip())
-
-        except OSError as e:
-            print("OSError > ", e.errno)
-            print("OSError > ", e.strerror)
-            print("OSError > ", e.filename)
-    '''
-
     def validate_params(self, params):
         if 'assembly_or_genome_reff' not in params:
             raise ValueError('required assembly_or_genome_ref field was not defined')
@@ -102,11 +82,12 @@ class GATKUtils:
 
     def duplicate_marking(self, output_dir, sam_file):
         command = ["java"]
-        command.extend(["-jar", os.path.join(self.path, "picard.jar")])
-        command.append("SortSam")
-        command.extend(["INPUT=", sam_file])
-        command.extend(["OUTPUT=", os.path.join(output_dir, "aligned_reads.bam")])
-        command.append("SORT_ORDER=coordinate")
+        command.append("-Xmx4G")
+        command.extend(["-jar", os.path.join(self.path, "gatk-4.1.3.0/gatk-package-4.1.3.0-local.jar")])
+        command.append("MarkDuplicatesSpark") 
+        command.extend(["-I", sam_file])
+        command.extend(["-M", os.path.join(output_dir, "dedup_metrics.txt")])
+        command.extend(["-O", os.path.join(output_dir, "sorted_dedup_reads.bam")])
         self.run_cmd(command)
 
     def sort_bam_index(self, output_dir):
@@ -118,22 +99,22 @@ class GATKUtils:
     def collect_alignment_and_insert_size_metrics(self, assembly_file, output_dir):
         command1 = ["java"]
         command1.extend(["-jar", os.path.join(self.path, "picard.jar")])
-        command1.append("CollectInsertSizeMetrics INPUT=")
-        command1.append(os.path.join(os.path.join(output_dir, "aligned_reads.bam")))
-        command1.extend(["OUTPUT=",os.path.join(output_dir,"insert_metrics.txt")])
-        command1.extend(["HISTOGRAM_FILE=" + os.path.join(output_dir, "insert_size_histogram.pdf")])
+        command1.append("CollectAlignmentSummaryMetrics")
+        command1.extend(["R=", assembly_file])
+        command1.extend(["I=", os.path.join(output_dir,"sorted_dedup_reads.bam")])
+        command1.extend(["O=", os.path.join(output_dir,"alignment_metrics.txt")])
         self.run_cmd(command1)
 
         command2 = ["java"]
         command2.extend(["-jar", os.path.join(self.path, "picard.jar")])
-        command2.extend(["CollectInsertSizeMetrics INPUT=", os.path.join(output_dir, "aligned_reads.bam")])
+        command2.extend(["CollectInsertSizeMetrics INPUT=", os.path.join(output_dir, "sorted_dedup_reads.bam")])
         command2.extend(["OUTPUT=", os.path.join(output_dir,"insert_metrics.txt" )])
         command2.extend(["HISTOGRAM_FILE=" + os.path.join(output_dir, "insert_size_histogram.pdf")])
         self.run_cmd(command2)
 
         command3 = ["samtools"]
         command3.append("depth")
-        command3.extend(["-a", os.path.join(output_dir, "aligned_reads.bam")])
+        command3.extend(["-a", os.path.join(output_dir, "sorted_dedup_reads.bam")])
         command3.extend([">", os.path.join(output_dir, "depth_out.txt")])
         self.run_cmd(command3)
 
@@ -143,7 +124,7 @@ class GATKUtils:
         command.extend(["-jar", os.path.join(self.path, "gatk-4.1.3.0/gatk-package-4.1.3.0-local.jar")])
         command.append("HaplotypeCaller")
         command.extend(["-R", assembly_file])
-        command.extend(["-I", os.path.join(output_dir, "aligned_reads.bam")])
+        command.extend(["-I", os.path.join(output_dir, "sorted_dedup_reads.bam")])
         command.extend(["-O", os.path.join(output_dir, "raw_variants.vcf")])
         self.run_cmd(command)
 
@@ -221,7 +202,7 @@ class GATKUtils:
         command.extend(["-jar", os.path.join(self.path, "gatk-4.1.3.0/gatk-package-4.1.3.0-local.jar")])
         command.append("BaseRecalibrator")
         command.extend(["-R", assembly_file])
-        command.extend(["-I", os.path.join(output_dir, "aligned_reads.bam")])
+        command.extend(["-I", os.path.join(output_dir, "sorted_dedup_reads.bam")])
         command.extend(["-known-sites", os.path.join(output_dir, "bqsr_snps.vcf")])
         command.extend(["-known-sites", os.path.join(output_dir, "bqsr_indels.vcf")])
         command.extend(["-O", os.path.join(output_dir, data_table)])
@@ -233,7 +214,7 @@ class GATKUtils:
         command.extend(["-jar", os.path.join(self.path, "gatk-4.1.3.0/gatk-package-4.1.3.0-local.jar")])
         command.append("ApplyBQSR")
         command.extend(["-R", assembly_file])
-        command.extend(["-I", os.path.join(output_dir,"aligned_reads.bam")])
+        command.extend(["-I", os.path.join(output_dir, "sorted_dedup_reads.bam")])
         command.extend(["-bqsr",os.path.join(output_dir, data_table)])
         command.extend(["-O", os.path.join(output_dir, "recal_reads.bam")])
         self.run_cmd(command)
