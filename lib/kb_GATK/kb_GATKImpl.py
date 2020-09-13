@@ -112,7 +112,7 @@ class kb_GATK:
         self.gu.index_assembly(assembly_file)
         self.gu.generate_sequence_dictionary(assembly_file)
         self.gu.duplicate_marking(output_dir, sam_file)
-        self.gu.sort_bam_index(output_dir)
+        #self.gu.sort_bam_index(output_dir)
         self.gu.collect_alignment_and_insert_size_metrics(assembly_file, output_dir)
         #self.gu.analyze_covariates(output_dir)
 
