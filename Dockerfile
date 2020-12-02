@@ -9,6 +9,12 @@ MAINTAINER KBase Developer
 RUN apt-get update && apt-get -y install wget 
 RUN mkdir -p /kb/module/deps
 WORKDIR /kb/module/deps
+#RUN conda install -y r-essentials r-base r-xml r-rcurl
+#RUN apt-get update &&\
+#    apt-get install -y g++
+
+#RUN R -q -e 'install.packages(c("ggplot2", "plyr", "reshape2", "RColorBrewer", "scales", "FactoMineR", "Hmisc", "cowplot", "shiny"),  repos="http://cran.us.r-project.org", dependencies=TRUE)'
+
 RUN wget https://github.com/broadinstitute/gatk/releases/download/4.1.3.0/gatk-4.1.3.0.zip
 RUN unzip gatk-4.1.3.0.zip
 
@@ -19,7 +25,8 @@ RUN apt-get update && apt-get install -y bwa \
     r-base
 
 
-RUN R -e "install.packages('gplots', dependencies=TRUE, repos = 'http://cran.us.r-project.org')"
+#RUN R -e "install.packages('gplots', dependencies=TRUE, repos = 'http://cran.us.r-project.org')"
+RUN R -q -e 'install.packages(c("ggplot2", "plyr", "reshape2", "RColorBrewer", "scales", "FactoMineR", "Hmisc", "cowplot", "shiny"),  repos="http://cran.us.r-project.org", dependencies=TRUE)'
 
 
 

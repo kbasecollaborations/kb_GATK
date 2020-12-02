@@ -11,6 +11,13 @@ class DownloadAlignmentUtils:
         pass
 
     def downloadreadalignment(self, source_ref, params, callback_url):
+        '''
+        downloadreadalignment: download alignment file
+        :param source_ref:
+        :param params:
+        :param callback_url:
+        :return:
+        '''
         self.callback_url = callback_url
         self.ru = ReadsAlignmentUtils(self.callback_url)
         params['source_ref'] = source_ref
@@ -29,6 +36,12 @@ class DownloadAlignmentUtils:
         return self.ru.download_alignment(params)
 
     def download_genome(self, genomeref, output_dir):
+        '''
+        download_genome:download genome
+        :param genomeref:
+        :param output_dir:
+        :return:
+        '''
         file = self.au.get_assembly_as_fasta({
           'ref': genomeref,
           'filename': os.path.join(output_dir, "ref_genome.fa")

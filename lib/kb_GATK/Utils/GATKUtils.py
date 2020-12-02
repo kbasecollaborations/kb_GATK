@@ -35,7 +35,12 @@ class GATKUtils:
         return "success"
 
     def validate_params(self, params):
-        if 'assembly_or_genome_reff' not in params:
+        '''
+
+        :param params:
+        :return:
+        '''
+        if 'assembly_or_genome_ref' not in params:
             raise ValueError('required assembly_or_genome_ref field was not defined')
         elif 'variation_object_name' not in params:
             raise ValueError('required variation_object_name field was not defined')
@@ -47,6 +52,11 @@ class GATKUtils:
             raise ValueError('required indel_filter field was not defined')
 
     def build_genome(self, assembly_file):
+        '''
+        build_genome: This function build genome from assembly data.
+        :param assembly_file:
+        :return:
+        '''
         command = ["bwa"]
         command.append("index")
         #command.extend(["-a", "bwtsw"])   #Todo : need to figure out usage of bwtsw option. 
@@ -54,12 +64,22 @@ class GATKUtils:
         self.run_cmd(command)
 
     def index_assembly(self, assembly_file):
+        '''
+        index_assembly: index assembly
+        :param assembly_file:
+        :return:
+        '''
         command = ["samtools"]
         command.append("faidx")
         command .append(assembly_file)
         self.run_cmd(command)
 
     def generate_sequence_dictionary(self, assembly_file):
+        '''
+        generate_sequence_dictionary : It generates sequence dictionary for assembly input.
+        :param assembly_file:
+        :return:
+        '''
         output_dict = assembly_file.replace("fa", "dict")
         command = ["java"]
         command.append("-jar")
@@ -69,6 +89,15 @@ class GATKUtils:
         self.run_cmd(command)
 
     def mapping_genome(self, ref_genome, rev_fastq, fwd_fastq, output_dir, strain_info):
+        '''
+        mapping genome: it maps genome pair end fastq reads to reference genome.
+        :param ref_genome:
+        :param rev_fastq:
+        :param fwd_fastq:
+        :param output_dir:
+        :param strain_info:
+        :return:
+        '''
         command = ["bwa"]
         command.append("mem")
         command.extend(["-t", "32"])
@@ -81,6 +110,12 @@ class GATKUtils:
         self.run_cmd(command)
 
     def duplicate_marking(self, output_dir, sam_file):
+        '''
+        duplicate_marking: locates and tags duplicate reads in a BAM or SAM file, where duplicate reads are defined as originating from a single fragment of DNA
+        :param output_dir:
+        :param sam_file:
+        :return:
+        '''
         command = ["java"]
         command.append("-Xmx4G")
         command.extend(["-jar", os.path.join(self.path, "gatk-4.1.3.0/gatk-package-4.1.3.0-local.jar")])
@@ -91,12 +126,23 @@ class GATKUtils:
         self.run_cmd(command)
 
     def sort_bam_index(self, output_dir):
+        '''
+        sort_bam_index: sort bam index file
+        :param output_dir:
+        :return:
+        '''
         command = ["samtools"]
         command.append("index")
         command.append(os.path.join(output_dir, "aligned_reads.bam"))
         self.run_cmd(command)
 
     def collect_alignment_and_insert_size_metrics(self, assembly_file, output_dir):
+        '''
+        collect_alignment_and_insert_size_metrics :
+        :param assembly_file:
+        :param output_dir:
+        :return:
+        '''
         command1 = ["java"]
         command1.extend(["-jar", os.path.join(self.path, "picard.jar")])
         command1.append("CollectAlignmentSummaryMetrics")
@@ -119,6 +165,12 @@ class GATKUtils:
         self.run_cmd(command3)
 
     def variant_calling(self, assembly_file, output_dir):
+        '''
+        variant_calling: The variants identified in this step will be filtered and provided as input for Base Quality Score Recalibration (BQSR)
+        :param assembly_file:
+        :param output_dir:
+        :return:
+        '''
         command = ["java"]
         command.append("-Xmx4G")
         command.extend(["-jar", os.path.join(self.path, "gatk-4.1.3.0/gatk-package-4.1.3.0-local.jar")])
@@ -129,6 +181,12 @@ class GATKUtils:
         self.run_cmd(command)
 
     def extract_variants(self, assembly_file, output_dir):
+        '''
+        extract_variants: This step separates SNPs and Indels so they can be processed and used independently
+        :param assembly_file:
+        :param output_dir:
+        :return:
+        '''
         command1 = ["java"]
         command1.append("-Xmx4G")
         command1.extend(["-jar", os.path.join(self.path, "gatk-4.1.3.0/gatk-package-4.1.3.0-local.jar")])
@@ -151,6 +209,19 @@ class GATKUtils:
 
 
     def filter_SNPs(self, assembly_file, output_file, output_dir, params):
+        '''
+        filter_SNPs: QD < 2.0: This is the variant confidence (from the QUAL field) divided by the unfiltered depth of non-hom-ref samples.
+                     FS > 60.0: This is the Phred-scaled probability that there is strand bias at the site.
+                     MQ < 40.0: This is the root mean square mapping quality over all the reads at the site.
+                     SOR > 4.0: This is another way to estimate strand bias using a test similar to the symmetric odds ratio test.
+                     MQRankSum < -8.0: Compares the mapping qualities of the reads supporting the reference allele and the alternate allele.
+                     ReadPosRankSum < -8.0: Compares whether the positions of the reference and alternate alleles are different within the reads.
+        :param assembly_file:
+        :param output_file:
+        :param output_dir:
+        :param params:
+        :return:
+        '''
         command  = ["java"]
         command.append("-Xmx4G")
         command.extend(["-jar", os.path.join(self.path,"gatk-4.1.3.0/gatk-package-4.1.3.0-local.jar")])
@@ -167,6 +238,17 @@ class GATKUtils:
         self.run_cmd(command)
 
     def filter_Indels(self, assembly_file, output_file, output_dir, params):
+        '''
+        filter_Indels:
+                    QD < 2.0: This is the variant confidence (from the QUAL field) divided by the unfiltered depth of non-hom-ref samples.
+                    FS > 200.0: This is the Phred-scaled probability that there is strand bias at the site.
+                    SOR > 10.0: This is another way to estimate strand bias using a test similar to the symmetric odds ratio test.
+        :param assembly_file:
+        :param output_file:
+        :param output_dir:
+        :param params:
+        :return:
+        '''
         command  = ["java"]
         command.append("-Xmx4G")
         command.extend(["-jar", os.path.join(self.path,"gatk-4.1.3.0/gatk-package-4.1.3.0-local.jar")])
@@ -180,6 +262,11 @@ class GATKUtils:
         self.run_cmd(command)
 
     def exclude_filtered_variants(self, output_dir):
+        '''
+        exclude_filtered_variants: extract only the passing variants and provide this as input to BQSR
+        :param output_dir:
+        :return:
+        '''
         command1 = ["java"]
         command1.append("-Xmx4G")
         command1.extend(["-jar", os.path.join(self.path, "gatk-4.1.3.0/gatk-package-4.1.3.0-local.jar")])
@@ -197,6 +284,13 @@ class GATKUtils:
         self.run_cmd(command2)
 
     def base_quality_score_recalibration(self, assembly_file, data_table, output_dir):
+        '''
+        base_quality_score_recalibration: BQSR is performed twice. The second pass is optional, only required to produce a recalibration report.
+        :param assembly_file:
+        :param data_table:
+        :param output_dir:
+        :return:
+        '''
         command = ["java"]
         command.append("-Xmx4G")
         command.extend(["-jar", os.path.join(self.path, "gatk-4.1.3.0/gatk-package-4.1.3.0-local.jar")])
@@ -209,6 +303,13 @@ class GATKUtils:
         self.run_cmd(command)
     
     def apply_BQSR(self, assembly_file, data_table, output_dir):
+        '''
+        apply_BQSR: This step applies the recalibration computed in the first BQSR step to the bam file.
+        :param assembly_file:
+        :param data_table:
+        :param output_dir:
+        :return:
+        '''
         command = ["java"]
         command.append("-Xmx4G")
         command.extend(["-jar", os.path.join(self.path, "gatk-4.1.3.0/gatk-package-4.1.3.0-local.jar")])
@@ -220,28 +321,48 @@ class GATKUtils:
         self.run_cmd(command)
 
     def analyze_covariates(self, output_dir):
+        '''
+        analyze_covariates: This step produces a recalibration report based on the output from the two BQSR runs.
+        :param output_dir:
+        :return:
+        '''
         command = ["java"]
         command.append("-Xmx4G")
         command.extend(["-jar", os.path.join(self.path,"gatk-4.1.3.0/gatk-package-4.1.3.0-local.jar")])
         command.append("AnalyzeCovariates")
-        command.extend(["-before", os.path.join(output_dir,"recal_data.table")])
+        command.extend(["-before", os.path.join(output_dir, "recal_data.table")])
         command.extend(["-after", os.path.join(output_dir, "post_recal_data.table")])
         command.extend(["-plots", os.path.join(output_dir, "recalibration_plots.pdf")])
         self.run_cmd(command)
 
     def bgzip_vcf_file(self, filepath):
+        '''
+        bgzip_vcf_file: This step zip the vcf file.
+        :param filepath:
+        :return:
+        '''
         bzfilepath = filepath + ".gz"
         command = ["bgzip", filepath]
         self.run_cmd(command)
         return bzfilepath        
 
     def index_vcf_file(self, filepath):
+        '''
+        index_vcf_file: this step index vcf file.
+        :param filepath:
+        :return:
+        '''
         bzfilepath = self.bgzip_vcf_file(filepath)
         command  = ["tabix", "-p", "vcf", bzfilepath]
         self.run_cmd(command)
         return bzfilepath       
 
     def reheader(self, filepath, strain_info):
+        '''
+        :param filepath:
+        :param strain_info:
+        :return:
+        '''
         reheader_vcf_path = filepath.replace(".vcf.gz", "") + "_reheader.vcf.gz"
         new_header_path = filepath.replace(".vcf.gz", "") + "_newheader.vcf"
         header_path = filepath.replace(".vcf.gz", "") + "_header.vcf"
@@ -256,9 +377,3 @@ class GATKUtils:
         self.run_cmd(command)
 
         return reheader_vcf_path
-'''
-if __name__ == "__main__":
-   GU = GATKUtils()
-   vcf_filepath = GU.index_vcf_file("filtered_snps_final.vcf")
-   GU.reheader(vcf_filepath, "rioqrwyeq")
-''' 

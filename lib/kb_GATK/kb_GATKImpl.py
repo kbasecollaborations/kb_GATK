@@ -52,7 +52,7 @@ class kb_GATK:
 
     def run_kb_GATK(self, ctx, params):
         """
-        This example function accepts any number of parameters and returns results in a KBaseReport
+        run_kb_GATK:This function accepts any number of parameters and returns results in a KBaseReport
         :param params: instance of mapping from String to unspecified object
         :returns: instance of type "ReportResults" -> structure: parameter
            "report_name" of String, parameter "report_ref" of String
@@ -60,6 +60,8 @@ class kb_GATK:
         # ctx is the context object
         # return variables are: output
         #BEGIN run_kb_GATK
+        self.gu.validate_params(params)
+        print(params)
         source_ref = params['alignment_ref']
         alignment_out = self.du.downloadreadalignment(source_ref, params, self.callback_url)
         sam_file = os.path.join(alignment_out['destination_dir'], "reads_alignment.sam")
@@ -68,19 +70,11 @@ class kb_GATK:
         #Todo Reading sample set and sample strains information
         '''
 
-        '''
-        command.extend(["-filter-name", "\"QD_filter\"", "-filter", "\"QD", "<", params['snp_filter']['snp_qd_filter'] + "\""])
-        command.extend(["-filter-name", "\"FS_filter\"", "-filter", "\"FS", "<", params['snp_filter']['snp_fs_filter'] + "\""])
-        command.extend(["-filter-name", "\"MQ_filter\"", "-filter", "\"MQ", "<", params['snp_filter']['snp_mq_filter'] + "\""])
-        command.extend(["-filter-name", "\"SOR_filter\"", "-filter", "\"SOR", "<", params['snp_filter']['snp_sor_filter'] + "\""])
-        command.extend(["-filter-name", "\"MQRankSum_filter\"", "-filter", "\"MQRankSum", "<", params['snp_filter']['snp_mqrankSum_filter'] + "\""])
-        command.extend(["-filter-name", "\"ReadPosRankSum_filter\"", "-filter", "\"ReadPosRankSum", "<", params['snp_filter']['snp_readposranksum_filter'] + "\""])
-        '''
-        print(params)
         strain_info = params['strain_info']
         output_dir = os.path.join(self.shared_folder, str(uuid.uuid4()))
         os.mkdir(output_dir)
 
+        #TODO: to get genome_or_assembly_ref from alignment ref.
         genome_or_assembly_ref = params['assembly_or_genome_ref']
         obj_type = self.wsc.get_object_info3({
             'objects':[{
@@ -102,9 +96,7 @@ class kb_GATK:
 
         assembly_file = self.du.download_genome(assembly_ref, output_dir)['path']
 
-        #output_dir = output_dir + "/"
-
-        #Todo: check time for building index file or donwload from cache. 
+        #Todo: check time for building index file or donwload from cache.
         #Todo: To discuss about cache_id to be used.
         #Todo: In case of copying genome, find the way of finding original genome (ref id) for getting original cache id.
 
@@ -112,9 +104,8 @@ class kb_GATK:
         self.gu.index_assembly(assembly_file)
         self.gu.generate_sequence_dictionary(assembly_file)
         self.gu.duplicate_marking(output_dir, sam_file)
-        #self.gu.sort_bam_index(output_dir)
         self.gu.collect_alignment_and_insert_size_metrics(assembly_file, output_dir)
-        #self.gu.analyze_covariates(output_dir)
+
 
         #Todo: avoid writing intermediate fies to save space and time I/O. 
         self.gu.variant_calling(assembly_file, output_dir)
@@ -125,6 +116,7 @@ class kb_GATK:
         self.gu.base_quality_score_recalibration(assembly_file, "recal_data.table", output_dir)
         self.gu.apply_BQSR(assembly_file, "recal_data.table", output_dir)
         self.gu.base_quality_score_recalibration(assembly_file, "post_recal_data.table", output_dir)
+        #self.gu.analyze_covariates(output_dir)
         self.gu.apply_BQSR(assembly_file,  "post_recal_data.table", output_dir)
         self.gu.filter_SNPs(assembly_file, "filtered_snps_final.vcf", output_dir, params)
       
@@ -132,13 +124,6 @@ class kb_GATK:
         #Todo: To get an example for saving structural variants(specially CNV) and compare with standard vcf output.
 
         self.gu.filter_Indels(assembly_file, "filtered_indels_final.vcf", output_dir, params)
-
-        '''
-        os.system("grep   '##fileformat' " + output_dir + "/filtered_snps_final.vcf > " + output_dir + "/sample.vcf")
-        cmd = "grep -v  '##' " + output_dir + "/filtered_snps_final.vcf >> " + output_dir + "/sample.vcf"
-        os.system(cmd)            # TODO : need to remove system command after fixing variationUtils.
-        '''
-
 
         vcf_filepath = self.gu.index_vcf_file(output_dir + "/filtered_snps_final.vcf")
         reheader_vcf_file = self.gu.reheader(vcf_filepath, strain_info)
