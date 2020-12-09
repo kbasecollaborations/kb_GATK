@@ -62,15 +62,30 @@ class kb_GATK:
         #BEGIN run_kb_GATK
         self.gu.validate_params(params)
         print(params)
+
+        ''' for tesitng only 
+        logging.info("start testing")
+        sam_file = "/kb/module/work/reads_alignment.sam"
+        output_dir = "/kb/module/work"
+        self.gu.duplicate_marking(output_dir, sam_file)
+        logging.info("stop testing")
+
+        return 1
+        stop testing '''
+
+        '''
         source_ref = params['alignment_ref']
         alignment_out = self.du.downloadreadalignment(source_ref, params, self.callback_url)
-        sam_file = os.path.join(alignment_out['destination_dir'], "reads_alignment.sam")
-
+        #sam_file = os.path.join(alignment_out['destination_dir'], "reads_alignment.sam")
+        bam_file = os.path.join(alignment_out['destination_dir'], "reads_alignment.bam")
+        '''
         '''
         #Todo Reading sample set and sample strains information
         '''
 
         strain_info = params['strain_info']
+
+        '''
         output_dir = os.path.join(self.shared_folder, str(uuid.uuid4()))
         os.mkdir(output_dir)
 
@@ -93,7 +108,7 @@ class kb_GATK:
             raise ValueError(obj_type + ' is not the right input for this method. '
                                       + 'Valid input include KBaseGenomes.Genome or '
                                       + 'KBaseGenomeAnnotations.Assembly ')       
-
+        
         assembly_file = self.du.download_genome(assembly_ref, output_dir)['path']
 
         #Todo: check time for building index file or donwload from cache.
@@ -103,13 +118,17 @@ class kb_GATK:
         self.gu.build_genome(assembly_file)
         self.gu.index_assembly(assembly_file)
         self.gu.generate_sequence_dictionary(assembly_file)
-        self.gu.duplicate_marking(output_dir, sam_file)
+        #self.gu.duplicate_marking(output_dir, sam_file)
+        self.gu.duplicate_marking(output_dir, bam_file)
         self.gu.collect_alignment_and_insert_size_metrics(assembly_file, output_dir)
 
 
         #Todo: avoid writing intermediate fies to save space and time I/O. 
         self.gu.variant_calling(assembly_file, output_dir)
         self.gu.extract_variants(assembly_file, output_dir)
+        '''
+        output_dir = "/kb/module/work/9884583c-719f-48b9-800c-3e5047737901"
+        assembly_file = "/kb/module/work/9884583c-719f-48b9-800c-3e5047737901/ref_genome.fa"
         self.gu.filter_SNPs(assembly_file, "filtered_snps.vcf", output_dir, params)
         self.gu.filter_Indels(assembly_file, "filtered_indels.vcf", output_dir, params)
         self.gu.exclude_filtered_variants(output_dir)
@@ -126,6 +145,7 @@ class kb_GATK:
         self.gu.filter_Indels(assembly_file, "filtered_indels_final.vcf", output_dir, params)
 
         vcf_filepath = self.gu.index_vcf_file(output_dir + "/filtered_snps_final.vcf")
+        
         reheader_vcf_file = self.gu.reheader(vcf_filepath, strain_info)
         #Todo : check existence of final filtered finals snps.
         #Todo : chnage assembly_or_genome_ref to genome_or_assembly_ref

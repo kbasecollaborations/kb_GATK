@@ -109,32 +109,36 @@ class GATKUtils:
         command.extend([">",os.path.join(output_dir, "aligned_reads.sam")])
         self.run_cmd(command)
 
-    def duplicate_marking(self, output_dir, sam_file):
+    def duplicate_marking(self, output_dir, bam_file):
         '''
         duplicate_marking: locates and tags duplicate reads in a BAM or SAM file, where duplicate reads are defined as originating from a single fragment of DNA
         :param output_dir:
         :param sam_file:
         :return:
         '''
+         
+        sort_command = ["samtools sort -o"]
+        sorted_bam_file = os.path.join(output_dir, "sorted_reads.bam")
+        sort_command.append(sorted_bam_file)
+        sort_command.append(bam_file)
+        self.run_cmd(sort_command)
+
         command = ["java"]
         command.append("-Xmx4G")
         command.extend(["-jar", os.path.join(self.path, "gatk-4.1.3.0/gatk-package-4.1.3.0-local.jar")])
-        command.append("MarkDuplicatesSpark") 
-        command.extend(["-I", sam_file])
+        #command.append("MarkDuplicatesSpark") 
+        command.append("MarkDuplicates")
+        #command.extend(["-I", sam_file])
+        command.extend(["-I", sorted_bam_file])
         command.extend(["-M", os.path.join(output_dir, "dedup_metrics.txt")])
-        command.extend(["-O", os.path.join(output_dir, "sorted_dedup_reads.bam")])
+        marked_dup_bam_file = os.path.join(output_dir, "sorted_dedup_reads.bam")
+        command.extend(["-O", marked_dup_bam_file])
         self.run_cmd(command)
-
-    def sort_bam_index(self, output_dir):
-        '''
-        sort_bam_index: sort bam index file
-        :param output_dir:
-        :return:
-        '''
-        command = ["samtools"]
-        command.append("index")
-        command.append(os.path.join(output_dir, "aligned_reads.bam"))
-        self.run_cmd(command)
+          
+        index_command = ["samtools"]
+        index_command.append("index")
+        index_command.append(marked_dup_bam_file)
+        self.run_cmd(index_command)
 
     def collect_alignment_and_insert_size_metrics(self, assembly_file, output_dir):
         '''
@@ -368,7 +372,7 @@ class GATKUtils:
         header_path = filepath.replace(".vcf.gz", "") + "_header.vcf"
         header_cmd = ["tabix -H", filepath, ">", header_path]
         self.run_cmd(header_cmd)
-
+        #Todo: to find the equivalent value of sample_1 from samfile.
         pattern = 's/sample_1/' + strain_info + '/'
         replace_cmd = ['sed' , pattern, header_path, ">",  new_header_path]
         self.run_cmd(replace_cmd)
