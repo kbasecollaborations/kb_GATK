@@ -233,12 +233,12 @@ class GATKUtils:
         command.extend(["-R", assembly_file])
         command.extend(["-V", os.path.join(output_dir, "raw_snps.vcf")])
         command.extend(["-O", os.path.join(output_dir, output_file)])
-        command.extend(["-filter-name", "\"QD_filter\"", "-filter", "\"QD", "<", params['snp_filter']['snp_qd_filter'] + "\""])
+        #command.extend(["-filter-name", "\"QD_filter\"", "-filter", "\"QD", "<", params['snp_filter']['snp_qd_filter'] + "\""])
         command.extend(["-filter-name", "\"FS_filter\"", "-filter", "\"FS", "<", params['snp_filter']['snp_fs_filter'] + "\""])
-        command.extend(["-filter-name", "\"MQ_filter\"", "-filter", "\"MQ", "<", params['snp_filter']['snp_mq_filter'] + "\""])
+        #command.extend(["-filter-name", "\"MQ_filter\"", "-filter", "\"MQ", "<", params['snp_filter']['snp_mq_filter'] + "\""])
         command.extend(["-filter-name", "\"SOR_filter\"", "-filter", "\"SOR", "<", params['snp_filter']['snp_sor_filter'] + "\""])
-        command.extend(["-filter-name", "\"MQRankSum_filter\"", "-filter", "\"MQRankSum", "<", params['snp_filter']['snp_mqrankSum_filter'] + "\""])
-        command.extend(["-filter-name", "\"ReadPosRankSum_filter\"", "-filter", "\"ReadPosRankSum", "<", params['snp_filter']['snp_readposranksum_filter'] + "\""])
+        #command.extend(["-filter-name", "\"MQRankSum_filter\"", "-filter", "\"MQRankSum", "<", params['snp_filter']['snp_mqrankSum_filter'] + "\""])
+        #command.extend(["-filter-name", "\"ReadPosRankSum_filter\"", "-filter", "\"ReadPosRankSum", "<", params['snp_filter']['snp_readposranksum_filter'] + "\""])
         self.run_cmd(command)
 
     def filter_Indels(self, assembly_file, output_file, output_dir, params):

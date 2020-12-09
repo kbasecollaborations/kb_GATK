@@ -68,7 +68,7 @@ class kb_GATKTest(unittest.TestCase):
                                                        'variation_object_name':'output_var_obj',
                                                        'input_sample_set':'57176/12/1',
                                                        'alignment_ref':'57176/29/1',
-                                                       'strain_info':'sample_1',
+                                                       'strain_info':'4cce3afe-7fd0-41a5-9285-ed0b627253c5',
                                                        'snp_filter':
                                                        {
                                                           'snp_qd_filter' : '2.0',

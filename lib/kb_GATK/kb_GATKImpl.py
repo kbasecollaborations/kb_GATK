@@ -2,6 +2,7 @@
 #BEGIN_HEADER
 import logging
 import os
+import shutil
 import uuid
 from installed_clients.VariationUtilClient import VariationUtil
 from installed_clients.KBaseReportClient import KBaseReport
@@ -73,7 +74,7 @@ class kb_GATK:
         return 1
         stop testing '''
 
-        '''
+        
         source_ref = params['alignment_ref']
         alignment_out = self.du.downloadreadalignment(source_ref, params, self.callback_url)
         #sam_file = os.path.join(alignment_out['destination_dir'], "reads_alignment.sam")
@@ -81,11 +82,11 @@ class kb_GATK:
         '''
         '''
         #Todo Reading sample set and sample strains information
-        '''
+        
 
         strain_info = params['strain_info']
 
-        '''
+        
         output_dir = os.path.join(self.shared_folder, str(uuid.uuid4()))
         os.mkdir(output_dir)
 
@@ -127,8 +128,14 @@ class kb_GATK:
         self.gu.variant_calling(assembly_file, output_dir)
         self.gu.extract_variants(assembly_file, output_dir)
         '''
-        output_dir = "/kb/module/work/9884583c-719f-48b9-800c-3e5047737901"
-        assembly_file = "/kb/module/work/9884583c-719f-48b9-800c-3e5047737901/ref_genome.fa"
+
+        work_dir = "/kb/module/work/9884583c-719f-48b9-800c-3e5047737901"
+       
+        shutil.copytree(work_dir, "/kb/module/work/tmp/9884583c-719f-48b9-800c-3e5047737901")
+
+        output_dir = "/kb/module/work/tmp/9884583c-719f-48b9-800c-3e5047737901"
+        assembly_file = "/kb/module/work/tmp/9884583c-719f-48b9-800c-3e5047737901/ref_genome.fa"
+        '''
         self.gu.filter_SNPs(assembly_file, "filtered_snps.vcf", output_dir, params)
         self.gu.filter_Indels(assembly_file, "filtered_indels.vcf", output_dir, params)
         self.gu.exclude_filtered_variants(output_dir)
